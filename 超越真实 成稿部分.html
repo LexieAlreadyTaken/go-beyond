@@ -1,0 +1,2902 @@
+<!doctype html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="generator" content="TiddlyWiki" />
+<meta name="tiddlywiki-version" content="5.3.6" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="format-detection" content="telephone=no">
+<link id="faviconLink" rel="shortcut icon" href="favicon.ico">
+<title>Tiddly文库 — 便携式word模拟器</title>
+<div id="styleArea">
+<style data-tiddler-title="$:/boot/boot.css" data-tiddler-type="text/css" type="text/css">/*
+Basic styles used before we boot up the parsing engine
+*/
+
+/*
+Error message and password prompt
+*/
+
+.tc-error-form {
+	font-family: sans-serif;
+	color: #fff;
+	z-index: 20000;
+	position: fixed;
+	background-color: rgb(255, 75, 75);
+	border: 8px solid rgb(255, 0, 0);
+	border-radius: 8px;
+	width: 50%;
+	margin-left: 25%;
+	margin-top: 4em;
+	padding: 0 2em 1em 2em;
+}
+
+.tc-error-form h1 {
+	text-align: center;
+}
+
+.tc-error-prompt {
+	text-align: center;
+	color: #000;
+}
+
+.tc-error-message {
+	overflow: auto;
+	max-height: 40em;
+	padding-right: 1em;
+	margin: 1em 0;
+	white-space: pre-line;
+}
+
+.tc-password-wrapper {
+    font-family: sans-serif;
+	z-index: 20000;
+	position: fixed;
+	text-align: center;
+	width: 200px;
+	top: 4em;
+	left: 50%;
+	margin-left: -144px; /* - width/2 - paddingHorz/2 - border */
+	padding: 16px 16px 16px 16px;
+	border-radius: 8px;
+}
+
+.tc-password-wrapper {
+	color: #000;
+	text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+	background-color: rgb(197, 235, 183);
+	border: 8px solid rgb(164, 197, 152);
+}
+
+.tc-password-wrapper form {
+	text-align: left;
+}
+
+.tc-password-wrapper h1 {
+	font-size: 16px;
+	line-height: 20px;
+	padding-bottom: 16px;
+}
+
+.tc-password-wrapper input {
+	width: 100%;
+}
+</style>
+</div>
+<style type="text/css">
+/*
+** Start with the normalize CSS reset, and then belay some of its effects
+*//*! modern-normalize v2.0.0 | MIT License | https://github.com/sindresorhus/modern-normalize */
+
+/*
+Document
+========
+*/
+
+/**
+Use a better box model (opinionated).
+*/
+
+*,
+::before,
+::after {
+	box-sizing: border-box;
+}
+
+html {
+	/* Improve consistency of default fonts in all browsers. (https://github.com/sindresorhus/modern-normalize/issues/3) */
+	font-family:
+		system-ui,
+		'Segoe UI',
+		Roboto,
+		Helvetica,
+		Arial,
+		sans-serif,
+		'Apple Color Emoji',
+		'Segoe UI Emoji';
+	line-height: 1.15; /* 1. Correct the line height in all browsers. */
+	-webkit-text-size-adjust: 100%; /* 2. Prevent adjustments of font size after orientation changes in iOS. */
+	-moz-tab-size: 4; /* 3. Use a more readable tab size (opinionated). */
+	tab-size: 4; /* 3 */
+}
+
+/*
+Sections
+========
+*/
+
+body {
+	margin: 0; /* Remove the margin in all browsers. */
+}
+
+/*
+Grouping content
+================
+*/
+
+/**
+1. Add the correct height in Firefox.
+2. Correct the inheritance of border color in Firefox. (https://bugzilla.mozilla.org/show_bug.cgi?id=190655)
+*/
+
+hr {
+	height: 0; /* 1 */
+	color: inherit; /* 2 */
+}
+
+/*
+Text-level semantics
+====================
+*/
+
+/**
+Add the correct text decoration in Chrome, Edge, and Safari.
+*/
+
+abbr[title] {
+	text-decoration: underline dotted;
+}
+
+/**
+Add the correct font weight in Edge and Safari.
+*/
+
+b,
+strong {
+	font-weight: bolder;
+}
+
+/**
+1. Improve consistency of default fonts in all browsers. (https://github.com/sindresorhus/modern-normalize/issues/3)
+2. Correct the odd 'em' font sizing in all browsers.
+*/
+
+code,
+kbd,
+samp,
+pre {
+	font-family:
+		ui-monospace,
+		SFMono-Regular,
+		Consolas,
+		'Liberation Mono',
+		Menlo,
+		monospace; /* 1 */
+	font-size: 1em; /* 2 */
+}
+
+/**
+Add the correct font size in all browsers.
+*/
+
+small {
+	font-size: 80%;
+}
+
+/**
+Prevent 'sub' and 'sup' elements from affecting the line height in all browsers.
+*/
+
+sub,
+sup {
+	font-size: 75%;
+	line-height: 0;
+	position: relative;
+	vertical-align: baseline;
+}
+
+sub {
+	bottom: -0.25em;
+}
+
+sup {
+	top: -0.5em;
+}
+
+/*
+Tabular data
+============
+*/
+
+/**
+1. Remove text indentation from table contents in Chrome and Safari. (https://bugs.chromium.org/p/chromium/issues/detail?id=999088, https://bugs.webkit.org/show_bug.cgi?id=201297)
+2. Correct table border color inheritance in Chrome and Safari. (https://bugs.chromium.org/p/chromium/issues/detail?id=935729, https://bugs.webkit.org/show_bug.cgi?id=195016)
+*/
+
+table {
+	text-indent: 0; /* 1 */
+	border-color: inherit; /* 2 */
+}
+
+/*
+Forms
+=====
+*/
+
+/**
+1. Change the font styles in all browsers.
+2. Remove the margin in Firefox and Safari.
+*/
+
+button,
+input,
+optgroup,
+select,
+textarea {
+	font-family: inherit; /* 1 */
+	font-size: 100%; /* 1 */
+	line-height: 1.15; /* 1 */
+	margin: 0; /* 2 */
+}
+
+/**
+Remove the inheritance of text transform in Edge and Firefox.
+*/
+
+button,
+select {
+	text-transform: none;
+}
+
+/**
+Correct the inability to style clickable types in iOS and Safari.
+*/
+
+button,
+[type='button'],
+[type='reset'],
+[type='submit'] {
+	-webkit-appearance: button;
+}
+
+/**
+Remove the inner border and padding in Firefox.
+*/
+
+::-moz-focus-inner {
+	border-style: none;
+	padding: 0;
+}
+
+/**
+Restore the focus styles unset by the previous rule.
+*/
+
+:-moz-focusring {
+	outline: 1px dotted ButtonText;
+}
+
+/**
+Remove the additional ':invalid' styles in Firefox.
+See: https://github.com/mozilla/gecko-dev/blob/2f9eacd9d3d995c937b4251a5557d95d494c9be1/layout/style/res/forms.css#L728-L737
+*/
+
+:-moz-ui-invalid {
+	box-shadow: none;
+}
+
+/**
+Remove the padding so developers are not caught out when they zero out 'fieldset' elements in all browsers.
+*/
+
+legend {
+	padding: 0;
+}
+
+/**
+Add the correct vertical alignment in Chrome and Firefox.
+*/
+
+progress {
+	vertical-align: baseline;
+}
+
+/**
+Correct the cursor style of increment and decrement buttons in Safari.
+*/
+
+::-webkit-inner-spin-button,
+::-webkit-outer-spin-button {
+	height: auto;
+}
+
+/**
+1. Correct the odd appearance in Chrome and Safari.
+2. Correct the outline style in Safari.
+*/
+
+[type='search'] {
+	-webkit-appearance: textfield; /* 1 */
+	outline-offset: -2px; /* 2 */
+}
+
+/**
+Remove the inner padding in Chrome and Safari on macOS.
+*/
+
+::-webkit-search-decoration {
+	-webkit-appearance: none;
+}
+
+/**
+1. Correct the inability to style clickable types in iOS and Safari.
+2. Change font properties to 'inherit' in Safari.
+*/
+
+::-webkit-file-upload-button {
+	-webkit-appearance: button; /* 1 */
+	font: inherit; /* 2 */
+}
+
+/*
+Interactive
+===========
+*/
+
+/*
+Add the correct display in Chrome and Safari.
+*/
+
+summary {
+	display: list-item;
+}
+*, input[type="search"] {
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+}/*
+** Button default styles. Makes them look consistent for all browsers
+*/
+html button {
+	line-height: 1.2;
+	color: ;
+	fill: ;
+	background: ;
+	border-color: ;
+}button:disabled svg {
+	fill: #bbbbbb;
+}/*
+** Basic element styles
+*/html, body {
+	font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji;
+	text-rendering: optimizeLegibility; /* Enables kerning and ligatures etc. */
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}html:-webkit-full-screen {
+	background-color: #f4f4f4;
+}body.tc-body {
+	font-size: 14px;
+	line-height: 20px;
+	word-wrap: break-word;
+	
+
+
+	color: #333333;
+	background-color: #f4f4f4;
+	fill: #333333;
+}/**
+ * Correct the font size and margin on `h1` elements within `section` and
+ * `article` contexts in Chrome, Firefox, and Safari.
+ */h1 {
+	font-size: 2em;
+}h1, h2, h3, h4, h5, h6 {
+	line-height: 1.2;
+	font-weight: normal;
+}pre {
+	display: block;
+	margin-top: 1em;
+	margin-bottom: 1em;
+	word-break: normal;
+	word-wrap: break-word;
+	white-space: pre-wrap;
+	background-color: #f5f5f5;
+	border: 1px solid #cccccc;
+	padding: 0 3px 2px;
+	border-radius: 3px;
+	font-family: "SFMono-Regular",Consolas,"Liberation Mono",Menlo,Courier,monospace;
+}code {
+	color: #dd1144;
+	background-color: #f7f7f9;
+	border: 1px solid #e1e1e8;
+	white-space: pre-wrap;
+	padding: 0 3px 2px;
+	border-radius: 3px;
+	font-family: "SFMono-Regular",Consolas,"Liberation Mono",Menlo,Courier,monospace;
+}blockquote {
+	border-left: 5px solid #bbbbbb;
+	margin-left: 25px;
+	padding-left: 10px;
+	quotes: "\201C""\201D""\2018""\2019";
+}blockquote > div {
+	margin-top: 1em;
+	margin-bottom: 1em;
+}blockquote.tc-big-quote {
+	font-family: Georgia, serif;
+	position: relative;
+	background: #f5f5f5;
+	border-left: none;
+	margin-left: 50px;
+	margin-right: 50px;
+	padding: 10px;
+	border-radius: 8px;
+}blockquote.tc-big-quote cite:before {
+	content: "\2014 \2009";
+}blockquote.tc-big-quote:before {
+	font-family: Georgia, serif;
+	color: #bbbbbb;
+	content: open-quote;
+	font-size: 8em;
+	line-height: 0.1em;
+	margin-right: 0.25em;
+	vertical-align: -0.4em;
+	position: absolute;
+	left: -50px;
+	top: 42px;
+}blockquote.tc-big-quote:after {
+	font-family: Georgia, serif;
+	color: #bbbbbb;
+	content: close-quote;
+	font-size: 8em;
+	line-height: 0.1em;
+	margin-right: 0.25em;
+	vertical-align: -0.4em;
+	position: absolute;
+	right: -80px;
+	bottom: -20px;
+}dl dt {
+	font-weight: bold;
+	margin-top: 6px;
+}textarea,
+input[type=text],
+input[type=search],
+input[type=""],
+input:not([type]) {
+	color: #333333;
+	background: #ffffff;
+}input[type="checkbox"] {
+	vertical-align: middle;
+}input[type="search"]::-webkit-search-decoration,
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-search-results-button,
+input[type="search"]::-webkit-search-results-decoration {
+	-webkit-appearance:none;
+}.tc-muted {
+	color: #bbbbbb;
+}svg.tc-image-button {
+	padding: 0px 1px 1px 0px;
+}.tc-icon-wrapper > svg {
+	width: 1em;
+	height: 1em;
+}kbd {
+	display: inline-block;
+	padding: 3px 5px;
+	font-size: 0.8em;
+	line-height: 1.2;
+	color: #333333;
+	vertical-align: middle;
+	background-color: #ffffff;
+	border: solid 1px #bbbbbb;
+	border-bottom-color: #bbbbbb;
+	border-radius: 3px;
+	box-shadow: inset 0 -1px 0 #bbbbbb;
+}::selection {
+	background-color: Highlight;
+	color: HighlightText;
+	background-color: ;
+	color: ;
+}.tc-inline-style {
+	background: #ffff00;
+	color: #000000;
+}form.tc-form-inline {
+	display: inline;
+}/*
+Markdown likes putting code elements inside pre elements
+*/
+pre > code {
+	padding: 0;
+	border: none;
+	background-color: inherit;
+	color: inherit;
+}/*
+Table defaults
+*/table {
+	border: 1px solid #dddddd;
+	width: auto;
+	max-width: 100%;
+	caption-side: bottom;
+	margin-top: 1em;
+	margin-bottom: 1em;
+	/* next 2 elements needed, since normalize 8.0.1 */
+	border-collapse: collapse;
+	border-spacing: 0;
+}table th, table td {
+	padding: 0 7px 0 7px;
+	border-top: 1px solid #dddddd;
+	border-left: 1px solid #dddddd;
+}table thead tr td, table th {
+	background-color: #f0f0f0;
+	font-weight: bold;
+}table tfoot tr td {
+	background-color: #a8a8a8;
+}/*
+Table utility classes
+*//* Remove borders from table as used in eg: GettingStarted*/
+.tc-table-no-border,
+.tc-table-no-border th,
+.tc-table-no-border td {
+	border: initial;
+}/* First column in table width will fit to text.*/
+/* This rule makes most sense with tc-first-link-nowrap*/
+.tc-first-col-min-width td:nth-child(1) {
+	width: 1%;
+}/*
+** Utility classes work well with tables but also for other containers
+*//* First link A element will not wrap */
+.tc-first-link-nowrap:first-of-type a {
+	white-space: nowrap;
+}/* Move the table to the center of the container */
+.tc-center {
+	margin-left: auto;
+	margin-right: auto;
+}.tc-max-width {
+	width: 100%;
+}.tc-max-width-80 {
+	max-width: 80%;
+}/* Allow input and textarea to look like the ControlPanel inputs */
+.tc-edit-max-width input,
+.tc-edit-max-width textarea {
+	width: 100%;
+	padding: 3px;
+}/*
+CSV parser plugin
+*/.tc-csv-table {
+	white-space: nowrap;
+}.tc-csv-table th,
+.tc-csv-table td {
+	white-space: pre-line;
+}/*
+Tiddler frame in story river
+*/.tc-tiddler-frame img,
+.tc-tiddler-frame svg,
+.tc-tiddler-frame canvas,
+.tc-tiddler-frame embed,
+.tc-tiddler-frame iframe {
+	max-width: 100%;
+}.tc-tiddler-body > embed,
+.tc-tiddler-body > iframe {
+	width: 100%;
+	height: 600px;
+}:root {
+	color-scheme: light;
+}/*
+** Links
+*/button.tc-tiddlylink,
+a.tc-tiddlylink {
+	text-decoration: none;
+	font-weight: 500;
+	color: #5778d8;
+	-webkit-user-select: inherit; /* Otherwise the draggable attribute makes links impossible to select */
+	-webkit-touch-callout: none; /* Prevents long presses from bringing up a link preview */
+}.tc-sidebar-lists a.tc-tiddlylink {
+	color: #999999;
+}.tc-sidebar-lists a.tc-tiddlylink:hover {
+	color: #444444;
+}button.tc-tiddlylink:hover,
+a.tc-tiddlylink:hover {
+	text-decoration: underline;
+}a.tc-tiddlylink-resolves {
+}a.tc-tiddlylink-shadow {
+	font-weight: bold;
+}a.tc-tiddlylink-shadow.tc-tiddlylink-resolves {
+	font-weight: normal;
+}a.tc-tiddlylink-missing {
+	font-style: italic;
+}a.tc-tiddlylink-external {
+	text-decoration: underline;
+	color: #0000ee;
+	background-color: inherit;
+}a.tc-tiddlylink-external:visited {
+	color: #0000aa;
+	background-color: inherit;
+}a.tc-tiddlylink-external:hover {
+	color: inherit;
+	background-color: inherit;
+}.tc-drop-down a.tc-tiddlylink:hover {
+	color: #ffffff;
+}/*
+** Drag and drop styles
+*/.tc-tiddler-dragger {
+	position: relative;
+	z-index: -10000;
+}.tc-tiddler-dragger-inner {
+	position: absolute;
+	top: -1000px;
+	left: -1000px;
+	display: inline-block;
+	padding: 8px 20px;
+	font-size: 16.9px;
+	font-weight: bold;
+	line-height: 20px;
+	color: #ffffff;
+	text-shadow: 0 1px 0 rgba(0, 0, 0, 1);
+	white-space: nowrap;
+	vertical-align: baseline;
+	background-color: #333333;
+	border-radius: 20px;
+}.tc-tiddler-dragger-cover {
+	position: absolute;
+	background-color: #f4f4f4;
+}.tc-page-container > .tc-dropzone {
+	min-height: 100vh;
+}.tc-dropzone {
+	position: relative;
+}.tc-dropzone.tc-dragover:before {
+	z-index: 10000;
+	display: block;
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	background: rgba(0,200,0,0.7);
+	text-align: center;
+	content: "现在放下（或按 ESC 键取消）";
+}.tc-droppable > .tc-droppable-placeholder {
+	display: none;
+}.tc-droppable.tc-dragover > .tc-droppable-placeholder {
+	display: block;
+	border: 2px dashed rgba(0,200,0,0.7);
+}.tc-draggable {
+	cursor: move;
+}.tc-sidebar-tab-open .tc-droppable-placeholder, .tc-tagged-draggable-list .tc-droppable-placeholder,
+.tc-links-draggable-list .tc-droppable-placeholder {
+	line-height: 2em;
+	height: 2em;
+}.tc-sidebar-tab-open-item {
+	position: relative;
+}.tc-sidebar-tab-open .tc-btn-invisible.tc-btn-mini svg {
+	font-size: 0.7em;
+	fill: #bbbbbb;
+}/*
+** Plugin reload warning
+*/.tc-plugin-reload-warning {
+	z-index: 1000;
+	display: block;
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	background: #ffe476;
+	text-align: center;
+}/*
+** Buttons
+*/button svg, button img, label svg, label img {
+	vertical-align: middle;
+}.tc-btn-invisible {
+	padding: 0;
+	margin: 0;
+	background: none;
+	border: none;
+	cursor: pointer;
+	color: #333333;
+	fill: #333333;
+}button:disabled.tc-btn-invisible  {
+	cursor: default;
+	color: #bbbbbb;
+}.tc-btn-boxed {
+	font-size: 0.6em;
+	padding: 0.2em;
+	margin: 1px;
+	background: none;
+	border: 1px solid #cccccc;
+	border-radius: 0.25em;
+}html body.tc-body .tc-btn-boxed svg {
+	font-size: 1.6666em;
+}.tc-btn-boxed:hover {
+	background: #bbbbbb;
+	color: #ffffff;
+}html body.tc-body .tc-btn-boxed:hover svg {
+	fill: #ffffff;
+}.tc-btn-rounded {
+	font-size: 0.5em;
+	line-height: 2;
+	padding: 0em 0.3em 0.2em 0.4em;
+	margin: 1px;
+	border: 1px solid #bbbbbb;
+	background: #bbbbbb;
+	color: #ffffff;
+	border-radius: 2em;
+}html body.tc-body .tc-btn-rounded svg {
+	font-size: 1.6666em;
+	fill: #ffffff;
+}.tc-btn-rounded:hover {
+	border: 1px solid #bbbbbb;
+	background: #ffffff;
+	color: #bbbbbb;
+}html body.tc-body .tc-btn-rounded:hover svg {
+	fill: #bbbbbb;
+}.tc-btn-icon svg {
+	height: 1em;
+	width: 1em;
+	fill: #bbbbbb;
+}.tc-btn-text {
+	margin-left: 7px;
+}/* used for documentation "fake" buttons */
+.tc-btn-standard {
+	line-height: 1.8;
+	color: #667;
+	background-color: #e0e0e0;
+	border: 1px solid #888;
+	padding: 2px 1px 2px 1px;
+	margin: 1px 4px 1px 4px;
+}.tc-btn-big-green {
+	display: inline-block;
+	padding: 8px;
+	margin: 4px 8px 4px 8px;
+	background: #34c734;
+	color: #ffffff;
+	fill: #ffffff;
+	border: none;
+	border-radius: 2px;
+	font-size: 1.2em;
+	line-height: 1.4em;
+	text-decoration: none;
+}.tc-btn-big-green svg,
+.tc-btn-big-green img {
+	height: 2em;
+	width: 2em;
+	vertical-align: middle;
+	fill: #ffffff;
+}.tc-primary-btn {
+	background: #5778d8;
+}.tc-sidebar-lists input {
+	color: #333333;
+}.tc-sidebar-lists button {
+	color: #333333;
+	fill: #333333;
+}.tc-sidebar-lists button.tc-btn-mini {
+	color: #c0c0c0;
+}.tc-sidebar-lists button.tc-btn-mini:hover {
+	color: #444444;
+}.tc-sidebar-lists button small {
+	color: #333333;
+}button svg.tc-image-button, button .tc-image-button img {
+	height: 1em;
+	width: 1em;
+}.tc-unfold-banner {
+	position: absolute;
+	padding: 0;
+	margin: 0;
+	background: none;
+	border: none;
+	width: 100%;
+	width: calc(100% + 2px);
+	margin-left: -43px;
+	text-align: center;
+	border-top: 2px solid #f8f8f8;
+	margin-top: 4px;
+}.tc-unfold-banner:hover {
+	background: #f8f8f8;
+	border-top: 2px solid #dddddd;
+}.tc-unfold-banner svg, .tc-fold-banner svg {
+	height: 0.75em;
+	fill: #cccccc;
+}.tc-unfold-banner:hover svg, .tc-fold-banner:hover svg {
+	fill: #888888;
+}.tc-fold-banner {
+	position: absolute;
+	padding: 0;
+	margin: 0;
+	background: none;
+	border: none;
+	width: 23px;
+	text-align: center;
+	margin-left: -35px;
+	top: 6px;
+	bottom: 6px;
+}.tc-fold-banner:hover {
+	background: #f8f8f8;
+}@media (max-width: 959px) {.tc-unfold-banner {
+		position: static;
+		width: calc(100% + 59px);
+	}.tc-fold-banner {
+		width: 16px;
+		margin-left: -16px;
+		font-size: 0.75em;
+	}}/*
+** Tags and missing tiddlers
+*/.tc-tag-list-item {
+	position: relative;
+	display: inline-block;
+}.tc-tags-wrapper {
+	margin: 4px 0 14px 0;
+}.tc-tags-wrapper .tc-tag-list-item {
+	margin-right: 7px;
+}.tc-missing-tiddler-label {
+	font-style: italic;
+	font-weight: normal;
+	display: inline-block;
+	font-size: 11.844px;
+	line-height: 14px;
+	white-space: nowrap;
+	vertical-align: baseline;
+}.tc-block-tags-dropdown > .tc-btn-invisible:hover {
+	background-color: #5778d8;
+}button.tc-tag-label, span.tc-tag-label {
+	display: inline-block;
+	padding: 0.16em 0.7em;
+	font-size: 0.9em;
+	font-weight: normal;
+	line-height: 1.2em;
+	color: #ffffff;
+	white-space: break-spaces;
+	vertical-align: baseline;
+	background-color: #eecc66;
+	border-radius: 1em;
+}.tc-sidebar-scrollable .tc-tag-label {
+	text-shadow: none;
+}.tc-untagged-separator {
+	border: 0;
+	height: 1px;
+	background: #d8d8d8;
+}button.tc-untagged-label {
+	background-color: #999999;
+}.tc-tag-label svg, .tc-tag-label img {
+	height: 1em;
+	width: 1em;
+	margin-right: 3px;
+	margin-bottom: 1px;
+	vertical-align: bottom;
+}.tc-edit-tags button.tc-remove-tag-button svg {
+	font-size: 0.7em;
+	vertical-align: middle;
+}.tc-tag-manager-table .tc-tag-label {
+}.tc-tag-manager-tag {
+	width: 100%;
+}button.tc-btn-invisible.tc-remove-tag-button {
+	outline: none;
+}.tc-tag-button-selected,
+.tc-list-item-selected a.tc-tiddlylink, a.tc-list-item-selected {
+	background-color: #5778d8;
+	color: #ffffff;
+}/*
+** Page layout
+*/.tc-topbar {
+	position: fixed;
+	z-index: 1200;
+}.tc-topbar-left {
+	left: 29px;
+	top: 5px;
+}.tc-topbar-right {
+	top: 5px;
+	right: 29px;
+}@media (max-width: 959px) {.tc-topbar-right {
+		right: 10px;
+	}}.tc-topbar button {
+	padding: 8px;
+}.tc-topbar svg {
+	fill: #bbbbbb;
+}.tc-topbar button:hover svg {
+	fill: #333333;
+}@media (max-width: 959px) {.tc-show-sidebar-btn svg.tc-image-chevron-left, .tc-hide-sidebar-btn svg.tc-image-chevron-right {
+		transform: rotate(-90deg);
+	}}.tc-sidebar-header {
+	color: #acacac;
+	fill: #acacac;
+}.tc-sidebar-header .tc-title a.tc-tiddlylink-resolves {
+	font-weight: normal;
+}.tc-sidebar-header .tc-sidebar-lists p {
+	margin-top: 3px;
+	margin-bottom: 3px;
+}.tc-sidebar-header .tc-missing-tiddler-label {
+	color: #acacac;
+}.tc-advanced-search input {
+	width: 60%;
+}.tc-search a svg {
+	width: 1.2em;
+	height: 1.2em;
+	vertical-align: middle;
+}.tc-page-controls {
+	margin-top: 14px;
+	margin-bottom: 14px;
+	font-size: 1.5em;
+}.tc-page-controls .tc-drop-down {
+	font-size: 1rem;
+}.tc-page-controls button {
+	margin-right: 0.5em;
+}.tc-page-controls a.tc-tiddlylink:hover {
+	text-decoration: none;
+}.tc-page-controls img {
+	width: 1em;
+}.tc-page-controls svg {
+	fill: #aaaaaa;
+}.tc-page-controls button:hover svg, .tc-page-controls a:hover svg {
+	fill: #000000;
+}.tc-sidebar-lists .tc-menu-list-item {
+	white-space: nowrap;
+}.tc-menu-list-count {
+	font-weight: bold;
+}.tc-menu-list-subitem {
+	padding-left: 7px;
+}.tc-story-river {
+	position: relative;
+}@media (max-width: 959px) {.tc-sidebar-header {
+		padding: 14px;
+		min-height: 32px;
+		margin-top: 0px;
+		transition:  min-height 400ms ease-in-out, padding-top 400ms ease-in-out, padding-bottom 400ms ease-in-out;
+	}.tc-story-river {
+		position: relative;
+		padding: 0;
+	}
+}@media (min-width: 960px) {.tc-message-box {
+		margin: 21px -21px 21px -21px;
+	}.tc-sidebar-scrollable {
+		position: fixed;
+		top: 0px;
+		left: 770px;
+		bottom: 0;
+		right: 0;
+		overflow-y: auto;
+		overflow-x: auto;
+		-webkit-overflow-scrolling: touch;
+		margin: 0 0 0 -42px;
+		padding: 71px 0 28px 42px;
+	}html[dir="rtl"] .tc-sidebar-scrollable {
+		left: auto;
+		right: 770px;
+	}.tc-story-river {
+		position: relative;
+		left: 0px;
+		top: 0px;
+		width: 770px;
+		padding: 42px 42px 42px 42px;
+	}.tc-story-river.tc-static-story-river {
+		margin-right: 0;
+		padding-right: 42px;
+	}}@media print {body.tc-body {
+		background-color: transparent;
+	}.tc-sidebar-header, .tc-topbar {
+		display: none;
+	}.tc-story-river {
+		margin: 0;
+		padding: 0;
+	}.tc-story-river .tc-tiddler-frame {
+		margin: 0;
+		border: none;
+		padding: 0;
+	}
+}/*
+** Tiddler styles
+*/.tc-tiddler-frame {
+	position: relative;
+	margin-bottom: 28px;
+	background-color: #ffffff;
+	border: 1px solid #ffffff;
+}
+.tc-tiddler-info {
+	overflow: hidden;
+	padding: 14px 42px 14px 42px;
+	background-color: #f8f8f8;
+	border-top: 1px solid #dddddd;
+	border-bottom: 1px solid #dddddd;
+}.tc-tiddler-info p {
+	margin-top: 3px;
+	margin-bottom: 3px;
+}.tc-tiddler-info .tc-tab-buttons button.tc-tab-selected {
+	background-color: #f8f8f8;
+	border-bottom: 1px solid #f8f8f8;
+}@media (max-width: 959px) {.tc-tiddler-info {
+		padding: 14px 14px 14px 14px;
+	}}.tc-view-field-table {
+	width: 100%;
+}.tc-view-field-name {
+	width: 1%; /* Makes this column be as narrow as possible */
+	white-space: nowrap;
+	vertical-align: top;
+	text-align: right;
+	font-style: italic;
+	font-weight: normal;
+}.tc-view-field-value {
+	word-break: break-all;
+}@media (max-width: 959px) {
+	.tc-tiddler-frame {
+		padding: 14px 14px 14px 14px;
+		margin-bottom: .5em;
+	}.tc-tiddler-info {
+		margin: 0 -14px 0 -14px;
+	}
+}@media (min-width: 960px) {
+	.tc-tiddler-frame {
+		padding: 28px 42px 42px 42px;
+		width: 686px;
+		border-radius: 2px;
+	}.tc-tiddler-info {
+		margin: 0 -42px 0 -42px;
+	}
+}.tc-site-title,
+.tc-titlebar {
+	font-weight: normal;
+	font-size: 2.35em;
+	line-height: 1.35em;
+	color: #182955;
+	margin: 0;
+}.tc-site-title {
+	color: #182955;
+}.tc-tiddler-title-icon {
+	vertical-align: middle;
+	margin-right: .1em;
+}.tc-tiddler-title-icon svg {
+	width: 0.9em;
+	height: 0.9em;
+}.tc-system-title-prefix {
+	color: #bbbbbb;
+}.tc-titlebar h2 {
+	font-size: 1em;
+	display: inline;
+}.tc-titlebar img {
+	height: 1em;
+}.tc-subtitle {
+	font-size: 0.9em;
+	color: #c0c0c0;
+	font-weight: normal;
+}.tc-subtitle .tc-tiddlylink {
+	margin-right: .3em;
+}.tc-tiddler-missing .tc-title {
+	font-style: italic;
+	font-weight: normal;
+}.tc-tiddler-frame .tc-tiddler-controls {
+	float: right;
+	padding: 3px; /* make space for outline */
+}.tc-tiddler-controls .tc-drop-down {
+	font-size: 0.6em;
+}.tc-tiddler-controls .tc-drop-down .tc-drop-down {
+	font-size: 1em;
+}.tc-tiddler-controls > span > button,
+.tc-tiddler-controls > span > span > button,
+.tc-tiddler-controls > span > span > span > button {
+	vertical-align: baseline;
+	margin-left:5px;
+}.tc-tiddler-controls button svg, .tc-tiddler-controls button img,
+.tc-search button svg, .tc-search a svg {
+	fill: #cccccc;
+}.tc-tiddler-controls button svg, .tc-tiddler-controls button img {
+	height: 0.75em;
+}.tc-search button svg, .tc-search a svg {
+	height: 1.2em;
+	width: 1.2em;
+	margin: 0 0.25em;
+}.tc-tiddler-controls button.tc-selected svg,
+.tc-page-controls button.tc-selected svg  {
+	fill: #444444;
+}.tc-tiddler-controls button.tc-btn-invisible:hover svg,
+.tc-search button:hover svg, .tc-search a:hover svg {
+	fill: #888888;
+}@media print {
+	.tc-tiddler-controls {
+		display: none;
+	}
+}.tc-tiddler-help { /* Help prompts within tiddler template */
+	color: #bbbbbb;
+	margin-top: 14px;
+}.tc-tiddler-help a.tc-tiddlylink {
+	color: #888888;
+}.tc-tiddler-frame .tc-edit-texteditor {
+	width: 100%;
+	margin: 4px 0 4px 0;
+}.tc-tiddler-frame input.tc-edit-texteditor,
+.tc-tiddler-frame textarea.tc-edit-texteditor,
+.tc-tiddler-frame iframe.tc-edit-texteditor,
+.tc-tiddler-frame select.tc-edit-texteditor {
+	padding: 3px 3px 3px 3px;
+	border: 1px solid #cccccc;
+	line-height: 1.3em;
+	font-family: ;
+}.tc-tiddler-frame input.tc-edit-texteditor,
+.tc-tiddler-frame textarea.tc-edit-texteditor,
+.tc-tiddler-frame iframe.tc-edit-texteditor {
+	-webkit-appearance: none;
+}.tc-tiddler-frame input.tc-edit-texteditor,
+.tc-tiddler-frame select.tc-edit-texteditor,
+.tc-tiddler-frame textarea.tc-edit-texteditor {
+	background-color: #f8f8f8;
+}.tc-tiddler-frame iframe.tc-edit-texteditor {
+	background-color: #ffffff;
+}.tc-tiddler-frame .tc-edit-fields input.tc-edit-fieldeditor,
+.tc-tiddler-frame .tc-edit-fields select.tc-edit-fieldeditor,
+.tc-tiddler-frame .tc-edit-fields textarea.tc-edit-fieldeditor {
+	margin: 0;
+	padding: 2px 3px;
+}.tc-tiddler-frame .tc-binary-warning {
+	width: 100%;
+	height: 5em;
+	text-align: center;
+	padding: 3em 3em 6em 3em;
+	background: #ffe476;
+	border: 1px solid #b99e2f;
+}canvas.tc-edit-bitmapeditor  {
+	border: 6px solid #ffffff;
+	cursor: crosshair;
+	-moz-user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+	margin-top: 6px;
+	margin-bottom: 6px;
+}.tc-edit-bitmapeditor-width {
+	display: block;
+}.tc-edit-bitmapeditor-height {
+	display: block;
+}.tc-tiddler-body {
+	clear: both;
+}.tc-single-tiddler-window .tc-tiddler-body,
+.tc-tiddler-frame .tc-tiddler-body {
+	font-size: 15px;
+	line-height: 22px;
+}.tc-titlebar, .tc-tiddler-edit-title {
+	overflow: hidden; /* https://github.com/Jermolene/TiddlyWiki5/issues/282 */
+}/*
+* Tiddler in a new window.
+* Also see: .tc-single-tiddler-window .tc-tiddler-body, above
+*/html body.tc-body.tc-single-tiddler-window {
+	margin: 1em;
+	background: #ffffff;
+}.tc-single-tiddler-window img,
+.tc-single-tiddler-window svg,
+.tc-single-tiddler-window canvas,
+.tc-single-tiddler-window embed,
+.tc-single-tiddler-window iframe {
+	max-width: 100%;
+}/*
+** Editor
+*/.tc-editor-toolbar {
+	margin-top: 8px;
+}.tc-tiddler-frame .tc-tiddler-editor.tc-tiddler-preview .tc-editor-toolbar,
+.tc-tiddler-frame .tc-tiddler-editor.tc-tiddler-preview-hidden .tc-editor-toolbar {
+	grid-area: toolbar;
+}.tc-editor-toolbar button {
+	vertical-align: middle;
+	background-color: #cccccc;
+	color: #444444;
+	fill: #444444;
+	border-radius: 4px;
+	padding: 3px;
+	margin: 2px 0 2px 4px;
+}.tc-editor-toolbar button.tc-text-editor-toolbar-item-adjunct {
+	margin-left: 1px;
+	width: 1em;
+	border-radius: 8px;
+}.tc-editor-toolbar button.tc-text-editor-toolbar-item-start-group {
+	margin-left: 11px;
+}.tc-editor-toolbar button.tc-selected {
+	background-color: #5778d8;
+}.tc-editor-toolbar button svg {
+	width: 1.6em;
+	height: 1.2em;
+}.tc-editor-toolbar .tc-drop-down button.tc-btn-mini {
+	padding: 2px 4px;
+}.tc-editor-toolbar button:hover {
+	background-color: #444444;
+	fill: #ffffff;
+	color: #ffffff;
+}.tc-editor-toolbar .tc-text-editor-toolbar-more {
+	white-space: normal;
+}.tc-editor-toolbar .tc-text-editor-toolbar-more button {
+	display: inline-block;
+	padding: 3px;
+	width: auto;
+}.tc-editor-toolbar .tc-search-results {
+	padding: 0;
+}.tc-editor-toolbar button.tc-editortoolbar-stamp-button + .tc-popup .tc-drop-down > p {
+	margin: 0;
+	padding: 0;
+}.tc-editor-toolbar button.tc-editortoolbar-stamp-button + .tc-popup .tc-drop-down a.tc-tiddlylink {
+	font-weight: normal;
+}/*
+** Adjustments for fluid-fixed mode
+*/@media (min-width: 960px) {.tc-story-river {
+		padding-right: 0;
+		position: relative;
+		width: auto;
+		left: 0;
+		margin-left: 0px;
+		margin-right: 350px;
+	}.tc-tiddler-frame {
+		width: 100%;
+	}.tc-sidebar-scrollable {
+		left: auto;
+		bottom: 0;
+		right: 0;
+		width: 350px;
+	}body.tc-body .tc-page-container.tc-page-view-zoomin .tc-tiddler-frame {
+		width: 100%;
+		width: calc(100% - 42px);
+	}}/*
+** Toolbar buttons
+*/.tc-page-controls svg.tc-image-new-button {
+	fill: ;
+}.tc-page-controls svg.tc-image-options-button {
+	fill: ;
+}.tc-page-controls svg.tc-image-save-button {
+	fill: ;
+}.tc-tiddler-controls button svg.tc-image-info-button {
+	fill: ;
+}.tc-tiddler-controls button svg.tc-image-edit-button {
+	fill: ;
+}.tc-tiddler-controls button svg.tc-image-close-button {
+	fill: ;
+}.tc-tiddler-controls button svg.tc-image-delete-button {
+	fill: ;
+}.tc-tiddler-controls button svg.tc-image-cancel-button {
+	fill: ;
+}.tc-tiddler-controls button svg.tc-image-done-button {
+	fill: ;
+}.tc-page-controls svg.tc-image-layout-button {
+	fill: ;
+}/*
+** Tiddler edit mode
+*/.tc-tiddler-edit-frame em.tc-edit {
+	color: #bbbbbb;
+	font-style: normal;
+}.tc-edit-type-dropdown a.tc-tiddlylink-missing {
+	font-style: normal;
+}.tc-type-selector .tc-edit-typeeditor {
+	width: auto;
+}.tc-type-selector-dropdown-wrapper {
+	display: inline-block;
+}.tc-type-selector-dropdown-wrapper {
+		min-width: calc(32ch + 4em);
+	}.tc-type-selector-dropdown-wrapper input.tc-edit-typeeditor {
+		min-width: 32ch;
+	}.tc-edit-tags {
+	border: 1px solid #cccccc;
+	padding: 4px 8px 4px 8px;
+}.tc-edit-add-tag {
+	display: inline-block;
+}.tc-edit-add-tag .tc-add-tag-name input {
+	width: 50%;
+}.tc-edit-add-tag .tc-keyboard {
+	display:inline;
+}.tc-edit-tags .tc-tag-label {
+	display: inline-block;
+}.tc-edit-tags-list {
+	margin: 14px 0 14px 0;
+}.tc-remove-tag-button {
+	padding-left: 4px;
+}.tc-tiddler-editor {
+	display: grid;
+}.tc-tiddler-frame .tc-tiddler-editor.tc-tiddler-preview {
+	grid-template-areas:
+		"toolbar toolbar"
+		"editor preview";
+	grid-template-columns: repeat(2, minmax(0px, 1fr));
+	grid-template-rows: auto 1fr;
+}.tc-tiddler-frame .tc-tiddler-editor.tc-tiddler-preview-hidden {
+	grid-template-areas:
+		"toolbar"
+		"editor";
+	grid-template-columns: 1fr;
+	grid-template-rows: auto 1fr;
+}.tc-tiddler-frame .tc-tiddler-editor.tc-tiddler-preview .tc-tiddler-preview-preview {
+	grid-area: preview;
+	overflow-wrap: anywhere;
+	word-break: normal;
+	border: 1px solid #cccccc;
+	margin: 4px 0 3px 3px;
+	padding: 3px 3px 3px 3px;
+}.tc-tiddler-frame .tc-tiddler-editor.tc-tiddler-preview .tc-edit-texteditor,
+.tc-tiddler-frame .tc-tiddler-editor.tc-tiddler-preview-hidden .tc-edit-texteditor {
+	grid-area: editor;
+}.tc-tiddler-frame .tc-tiddler-editor.tc-tiddler-preview canvas.tc-edit-bitmapeditor,
+.tc-tiddler-frame .tc-tiddler-editor.tc-tiddler-preview-hidden canvas.tc-edit-bitmapeditor {
+	grid-area: editor;
+	max-width: 100%;
+}.tc-edit-fields {
+	width: 100%;
+}.tc-edit-fields.tc-edit-fields-small {
+	margin-top: 0;
+	margin-bottom: 0;
+}.tc-edit-fields table, .tc-edit-fields tr, .tc-edit-fields td {
+	border: none;
+	padding: 4px;
+}.tc-edit-fields > tbody > .tc-edit-field:nth-child(odd) {
+	background-color: #f0f4f0;
+}.tc-edit-fields > tbody > .tc-edit-field:nth-child(even) {
+	background-color: #e0e8e0;
+}.tc-edit-field-name {
+	text-align: right;
+}.tc-edit-field-value input {
+	width: 100%;
+}.tc-edit-field-remove {
+}.tc-edit-field-remove svg {
+	height: 1em;
+	width: 1em;
+	fill: #bbbbbb;
+	vertical-align: middle;
+}.tc-edit-field-add-name-wrapper input.tc-edit-texteditor {
+	width: auto;
+}.tc-edit-field-add-name-wrapper {
+	display: inline-block;
+}.tc-edit-field-add-value {
+	display: inline-block;
+}@media (min-width: 960px) {.tc-edit-field-add-value {
+		width: 35%;
+	}}.tc-edit-field-add-button {
+	display: inline-block;
+	width: 10%;
+}/*
+** Tiddler editor dropzone
+*/.tc-dropzone-editor {
+	position:relative;
+}.tc-dropzone-editor.tc-dragover .tc-editor-toolbar::after{
+	z-index: 10000;
+	top:0;
+	left:0;
+	right:0;
+	height: 100%;
+	background: rgba(0,200,0,0.7);
+	content: "现在放下（或按 ESC 键取消）";
+	pointer-events: none;
+	position: absolute;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-color: #ffffff;
+	border: 4px dashed #999999;
+	font-weight: bold;
+	font-size: 150%;
+	opacity: 0.8;
+	color: #333333;
+}.tc-editor-importpopup {
+	width: 100%;
+	height: 100%;
+}.tc-editor-import {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	background: #f5f5f5;
+	box-shadow: 2px 2px 10px #333333;
+	padding: 10px;
+	width: 96%;
+	border: 1px solid #cccccc;
+	text-align:center;
+}.tc-editor-import img {
+	max-height: 500px;
+}/*
+** Storyview Classes
+*/.tc-viewswitcher .tc-image-button {
+	margin-right: .3em;
+}.tc-page-container.tc-page-view-zoomin .tc-tiddler-frame {
+	position: absolute;
+	display: block;
+	width: 100%;
+}@media (min-width: 960px) {.tc-page-container.tc-page-view-zoomin .tc-tiddler-frame {
+		width: calc(100% - 84px);
+	}}/*
+** Dropdowns
+*/.tc-btn-dropdown {
+	text-align: left;
+}.tc-btn-dropdown svg, .tc-btn-dropdown img {
+	height: 1em;
+	width: 1em;
+	fill: #bbbbbb;
+}.tc-drop-down-wrapper {
+	position: relative;
+}.tc-drop-down {
+	min-width: 380px;
+	border: 1px solid #bbbbbb;
+	background-color: #ffffff;
+	padding: 7px 0 7px 0;
+	margin: 4px 0 0 0;
+	white-space: nowrap;
+	text-shadow: none;
+	line-height: 1.4;
+}.tc-drop-down .tc-drop-down {
+	margin-left: 14px;
+}.tc-drop-down button svg, .tc-drop-down a svg  {
+	fill: #333333;
+}.tc-drop-down button:disabled svg {
+	fill: #bbbbbb;
+}.tc-drop-down button.tc-btn-invisible:hover svg {
+	fill: #ffffff;
+}.tc-drop-down .tc-drop-down-info {
+	padding-left: 14px;
+}.tc-drop-down p {
+	padding: 0 14px 0 14px;
+}.tc-drop-down svg {
+	width: 1em;
+	height: 1em;
+}.tc-drop-down img {
+	width: 1em;
+}.tc-drop-down a, .tc-drop-down button {
+	display: block;
+	padding: 0 14px 0 14px;
+	width: 100%;
+	text-align: left;
+	color: #333333;
+	line-height: 1.4;
+}.tc-drop-down .tc-tab-set .tc-tab-buttons button {
+	display: inline-block;
+	width: auto;
+	margin-bottom: 0px;
+	border-bottom-left-radius: 0;
+	border-bottom-right-radius: 0;
+}.tc-drop-down .tc-prompt {
+	padding: 0 14px;
+}.tc-drop-down .tc-chooser {
+	border: none;
+}.tc-drop-down .tc-chooser .tc-swatches-horiz {
+	font-size: 0.4em;
+	padding-left: 1.2em;
+}.tc-drop-down .tc-file-input-wrapper {
+	width: 100%;
+}.tc-drop-down .tc-file-input-wrapper button {
+	color: #333333;
+}.tc-drop-down a:hover, .tc-drop-down button:hover, .tc-drop-down .tc-file-input-wrapper:hover button {
+	color: #ffffff;
+	background-color: #5778d8;
+	text-decoration: none;
+}.tc-drop-down .tc-tab-buttons button {
+	background-color: #ececec;
+}.tc-drop-down .tc-tab-buttons button.tc-tab-selected {
+	background-color: #ffffff;
+	border-bottom: 1px solid #ffffff;
+}.tc-drop-down-bullet {
+	display: inline-block;
+	width: 0.5em;
+}.tc-drop-down .tc-tab-contents a {
+	padding: 0 0.5em 0 0.5em;
+}.tc-block-dropdown-wrapper {
+	position: relative;
+}.tc-block-dropdown {
+	position: absolute;
+	min-width: 220px;
+	border: 1px solid #bbbbbb;
+	background-color: #ffffff;
+	padding: 7px 0;
+	margin: 4px 0 0 0;
+	white-space: nowrap;
+	z-index: 1000;
+	text-shadow: none;
+}.tc-block-dropdown.tc-search-drop-down {
+	margin-left: -12px;
+}.tc-block-dropdown a {
+	display: block;
+	padding: 4px 14px 4px 14px;
+}.tc-block-dropdown.tc-search-drop-down a {
+	display: block;
+	padding: 0px 10px 0px 10px;
+}.tc-drop-down .tc-dropdown-item-plain,
+.tc-block-dropdown .tc-dropdown-item-plain {
+	padding: 4px 14px 4px 7px;
+}.tc-drop-down .tc-dropdown-item,
+.tc-block-dropdown .tc-dropdown-item {
+	padding: 4px 14px 4px 7px;
+	color: #bbbbbb;
+}.tc-block-dropdown a.tc-tiddlylink:hover {
+	color: #ffffff;
+	background-color: #5778d8;
+	text-decoration: none;
+}.tc-search-results {
+	padding: 0 7px 0 7px;
+}.tc-image-chooser, .tc-colour-chooser {
+	white-space: normal;
+}.tc-image-chooser a,
+.tc-colour-chooser a {
+	display: inline-block;
+	vertical-align: top;
+	text-align: center;
+	position: relative;
+}.tc-image-chooser a {
+	border: 1px solid #bbbbbb;
+	padding: 2px;
+	margin: 2px;
+	width: 4em;
+	height: 4em;
+}.tc-colour-chooser a {
+	padding: 3px;
+	width: 2em;
+	height: 2em;
+	vertical-align: middle;
+}.tc-image-chooser a:hover,
+.tc-colour-chooser a:hover {
+	background: #5778d8;
+	padding: 0px;
+	border: 3px solid #5778d8;
+}.tc-image-chooser a svg,
+.tc-image-chooser a img {
+	display: inline-block;
+	width: auto;
+	height: auto;
+	max-width: 3.5em;
+	max-height: 3.5em;
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	margin: auto;
+}/* Make search dropdown visible on small screens. issue #7003 */
+@media (max-width: 960px) {.tc-sidebar-search .tc-block-dropdown-wrapper {
+		position: initial;
+	}}/*
+** Modals
+*/.tc-modal-wrapper {
+	position: fixed;
+	overflow: auto;
+	overflow-y: scroll;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	z-index: 900;
+}.tc-modal-backdrop {
+	position: fixed;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	z-index: 1000;
+	background-color: #333333;
+}.tc-modal {
+	z-index: 1100;
+	background-color: #ffffff;
+	border: 1px solid #999999;
+}@media (max-width: 55em) {
+	.tc-modal {
+		position: fixed;
+		top: 1em;
+		left: 1em;
+		right: 1em;
+	}.tc-modal-body {
+		overflow-y: auto;
+		max-height: 400px;
+		max-height: 60vh;
+	}
+}@media (min-width: 55em) {
+	.tc-modal {
+		position: fixed;
+		top: 2em;
+		left: 25%;
+		width: 50%;
+	}.tc-modal-body {
+		overflow-y: auto;
+		max-height: 400px;
+		max-height: 60vh;
+	}
+}.tc-modal-header {
+	padding: 9px 15px;
+	border-bottom: 1px solid #eeeeee;
+}.tc-modal-header h3 {
+	margin: 0;
+	line-height: 30px;
+}.tc-modal-header img, .tc-modal-header svg {
+	width: 1em;
+	height: 1em;
+}.tc-modal-body {
+	padding: 15px;
+}.tc-modal-footer {
+	padding: 14px 15px 15px;
+	margin-bottom: 0;
+	text-align: right;
+	background-color: #f5f5f5;
+	border-top: 1px solid #dddddd;
+}.tc-modal-prevent-scroll {
+	overflow: hidden;
+}/*
+** Centered modals
+*/
+.tc-modal-centered .tc-modal {
+	width: auto;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%) !important;
+}/*
+** Notifications
+*/.tc-notification {
+	position: fixed;
+	top: 14px;
+	right: 42px;
+	z-index: 1300;
+	max-width: 280px;
+	padding: 0 14px 0 14px;
+	background-color: #ffffdd;
+	border: 1px solid #999999;
+}/*
+** Tabs
+*/.tc-tab-set.tc-vertical {
+	display: -webkit-flex;
+	display: flex;
+}.tc-tab-buttons {
+	font-size: 0.85em;
+	padding-top: 1em;
+	margin-bottom: -2px;
+}.tc-tab-buttons.tc-vertical  {
+	z-index: 100;
+	display: block;
+	padding-top: 14px;
+	vertical-align: top;
+	text-align: right;
+	margin-bottom: inherit;
+	margin-right: -1px;
+	max-width: 33%;
+	-webkit-flex: 0 0 auto;
+	flex: 0 0 auto;
+}.tc-tab-buttons button.tc-tab-selected {
+	color: #666666;
+	background-color: #ffffff;
+	border-left: 1px solid #d8d8d8;
+	border-top: 1px solid #d8d8d8;
+	border-right: 1px solid #d8d8d8;
+}.tc-tab-buttons button {
+	color: #666666;
+	padding: 3px 5px 3px 5px;
+	margin-right: 0.3em;
+	font-weight: normal;
+	border: none;
+	background: inherit;
+	background-color: #d8d8d8;
+	border-left: 1px solid #cccccc;
+	border-top: 1px solid #cccccc;
+	border-right: 1px solid #cccccc;
+	border-top-left-radius: 2px;
+	border-top-right-radius: 2px;
+	border-bottom-left-radius: 0;
+	border-bottom-right-radius: 0;
+}.tc-tab-buttons.tc-vertical button {
+	display: block;
+	width: 100%;
+	margin-top: 3px;
+	margin-right: 0;
+	text-align: right;
+	background-color: #d8d8d8;
+	border-left: 1px solid #cccccc;
+	border-bottom: 1px solid #cccccc;
+	border-right: none;
+	border-top-left-radius: 2px;
+	border-bottom-left-radius: 2px;
+	border-top-right-radius: 0;
+	border-bottom-right-radius: 0;
+}.tc-tab-buttons.tc-vertical button.tc-tab-selected {
+	background-color: #ffffff;
+	border-right: 1px solid #ffffff;
+}.tc-tab-divider {
+	border-top: 1px solid #d8d8d8;
+}.tc-tab-divider.tc-vertical  {
+	display: none;
+}.tc-tab-content {
+	margin-top: 14px;
+}.tc-tab-content.tc-vertical  {
+	display: inline-block;
+	vertical-align: top;
+	padding-top: 0;
+	padding-left: 14px;
+	border-left: 1px solid #cccccc;
+	-webkit-flex: 1 0 70%;
+	flex: 1 0 70%;
+	overflow: auto;
+}.tc-sidebar-lists .tc-tab-buttons {
+	margin-bottom: -1px;
+}.tc-sidebar-lists .tc-tab-buttons button.tc-tab-selected {
+	background-color: #f4f4f4;
+	color: ;
+	border-left: 1px solid #d8d8d8;
+	border-top: 1px solid #d8d8d8;
+	border-right: 1px solid #d8d8d8;
+}.tc-sidebar-lists .tc-tab-buttons button {
+	background-color: #e0e0e0;
+	color: #666666;
+	border-left: 1px solid #cccccc;
+	border-top: 1px solid #cccccc;
+	border-right: 1px solid #cccccc;
+}.tc-sidebar-lists .tc-tab-divider {
+	border-top: 1px solid #e4e4e4;
+}.tc-more-sidebar > .tc-tab-set > .tc-tab-buttons > button {
+	display: block;
+	width: 100%;
+	background-color: #e0e0e0;
+	border-top: none;
+	border-left: none;
+	border-bottom: none;
+	border-right: 1px solid #ccc;
+	margin-bottom: inherit;
+}.tc-more-sidebar > .tc-tab-set > .tc-tab-buttons > button.tc-tab-selected {
+	background-color: #f4f4f4;
+	border: none;
+}/*
+** Manager
+*/.tc-manager-wrapper {}.tc-manager-controls {}.tc-manager-control {
+	margin: 0.5em 0;
+}.tc-manager-control select {
+	max-width: 100%;
+}.tc-manager-list {
+	width: 100%;
+	border-top: 1px solid #bbbbbb;
+	border-left: 1px solid #bbbbbb;
+	border-right: 1px solid #bbbbbb;
+}.tc-manager-list-item {}.tc-manager-list-item-heading {
+	display: block;
+	width: 100%;
+	text-align: left;
+	border-bottom: 1px solid #bbbbbb;
+	padding: 3px;
+}.tc-manager-list-item-heading-selected {
+	font-weight: bold;
+	color: #ffffff;
+	fill: #ffffff;
+	background-color: #333333;
+}.tc-manager-list-item-heading:hover {
+	background: #5778d8;
+	color: #ffffff;
+}.tc-manager-list-item-content {
+	display: flex;
+}.tc-manager-list-item-content-sidebar {
+	flex: 1 0;
+	background: #f8f8f8;
+	border-right: 0.5em solid #bbbbbb;
+	border-bottom: 0.5em solid #bbbbbb;
+	white-space: nowrap;
+}.tc-manager-list-item-content-item-heading {
+	display: block;
+	width: 100%;
+	text-align: left;
+	background: #bbbbbb;
+	text-transform: uppercase;
+	font-size: 0.6em;
+	font-weight: bold;
+	padding: 0.5em 0 0.5em 0;
+}.tc-manager-list-item-content-item-body {
+	padding: 0 0.5em 0 0.5em;
+}.tc-manager-list-item-content-item-body > pre {
+	margin: 0.5em 0 0.5em 0;
+	border: none;
+	background: inherit;
+}.tc-manager-list-item-content-tiddler {
+	flex: 3 1;
+	border-left: 0.5em solid #bbbbbb;
+	border-right: 0.5em solid #bbbbbb;
+	border-bottom: 0.5em solid #bbbbbb;
+}.tc-manager-list-item-content-item-body > table {
+	border: none;
+	padding: 0;
+	margin: 0;
+}.tc-manager-list-item-content-item-body > table td {
+	border: none;
+}.tc-manager-icon-editor > button {
+	width: 100%;
+}.tc-manager-icon-editor > button > svg,
+.tc-manager-icon-editor > button > button {
+	width: 100%;
+	height: auto;
+}/*
+** Import table
+*/.tc-import-table {
+	width: 100%;
+}.tc-import-table svg.tc-image-edit-button {
+	max-width: unset;
+}.tc-import-table th:first-of-type {
+	width: 10%;
+}.tc-import-table th:last-of-type {
+	width: 30%;
+}.tc-import-table .tc-row-disabled {
+	background: #88888810;
+	opacity: 0.8;
+}.tc-import-table .tc-row-warning {
+	background: #ffc9c950;
+}/*
+** Alerts
+*/.tc-alerts {
+	position: fixed;
+	top: 28px;
+	left: 0;
+	right: 0;
+	max-width: 50%;
+	z-index: 20000;
+}.tc-alert {
+	position: relative;
+	margin: 14px;
+	padding: 7px;
+	border: 1px solid #b99e2f;
+	background-color: #ffe476;
+}.tc-alert-toolbar {
+	position: absolute;
+	top: 7px;
+	right: 7px;
+	line-height: 0;
+}.tc-alert-toolbar svg {
+	fill: #b99e2f;
+}.tc-alert-subtitle {
+	color: #b99e2f;
+	font-weight: bold;
+	font-size: 0.8em;
+	margin-bottom: 0.5em;
+}.tc-alert-body > p {
+	margin: 0;
+}.tc-alert-highlight {
+	color: #881122;
+}@media (min-width: 960px) {.tc-static-alert {
+		position: relative;
+	}.tc-static-alert-inner {
+		position: absolute;
+		z-index: 100;
+	}}.tc-static-alert-inner {
+	padding: 0 2px 2px 42px;
+	color: #aaaaaa;
+}/*
+** Floating drafts list
+*/.tc-drafts-list {
+	z-index: 2000;
+	position: fixed;
+	font-size: 0.8em;
+	left: 0;
+	bottom: 0;
+}.tc-drafts-list a {
+	margin: 0 0.5em;
+	padding: 4px 4px;
+	border-top-left-radius: 4px;
+	border-top-right-radius: 4px;
+	border: 1px solid #ffffff;
+	border-bottom: none;
+	background: #ff0000;
+	color: #ffffff;
+	fill: #ffffff;
+}.tc-drafts-list a:hover {
+	text-decoration: none;
+	background: #333333;
+	color: #ffffff;
+	fill: #ffffff;
+}.tc-drafts-list a svg {
+	width: 1em;
+	height: 1em;
+	vertical-align: text-bottom;
+}/*
+** Control panel
+*/.tc-control-panel td {
+	padding: 4px;
+}.tc-control-panel table, .tc-control-panel table input, .tc-control-panel table textarea {
+	width: 100%;
+}.tc-control-panel-setting {
+	border-top: 1px solid #bbbbbb;
+}.tc-plugin-info {
+	display: flex;
+	text-shadow: none;
+	border: 1px solid #bbbbbb;
+	fill: #bbbbbb;
+	background-color: #ffffff;
+	margin: 0.5em 0 0.5em 0;
+	padding: 4px;
+	align-items: center;
+}.tc-sidebar-lists a.tc-tiddlylink.tc-plugin-info {
+	color: #5778d8;
+}.tc-plugin-info-sub-plugins .tc-plugin-info {
+	margin: 0.5em;
+	background: #ffffff;
+}.tc-plugin-info-sub-plugin-indicator {
+	margin: -16px 1em 0 2em;
+}.tc-plugin-info-sub-plugin-indicator button {
+	color: #ffffff;
+	background: #333333;
+	border-radius: 8px;
+	padding: 2px 7px;
+	font-size: 0.75em;
+}.tc-plugin-info-sub-plugins .tc-plugin-info-dropdown {
+	margin-left: 1em;
+	margin-right: 1em;
+}.tc-plugin-info-disabled {
+	background: -webkit-repeating-linear-gradient(45deg, #ff0, #ff0 10px, #eee 10px, #eee 20px);
+	background: repeating-linear-gradient(45deg, #ff0, #ff0 10px, #eee 10px, #eee 20px);
+}.tc-plugin-info-disabled:hover {
+	background: -webkit-repeating-linear-gradient(45deg, #aa0, #aa0 10px, #888 10px, #888 20px);
+	background: repeating-linear-gradient(45deg, #aa0, #aa0 10px, #888 10px, #888 20px);
+}a.tc-tiddlylink.tc-plugin-info:hover {
+	text-decoration: none;
+	background-color: #5778d8;
+	color: #ffffff;
+	fill: #333333;
+}a.tc-tiddlylink.tc-plugin-info:hover > .tc-plugin-info-chunk > svg {
+	fill: #ffffff;
+}.tc-plugin-info-chunk {
+	margin: 2px;
+}.tc-plugin-info-chunk.tc-plugin-info-toggle {
+	flex-grow: 0;
+	flex-shrink: 0;
+	line-height: 1;
+}.tc-plugin-info-chunk.tc-plugin-info-icon {
+	flex-grow: 0;
+	flex-shrink: 0;
+	line-height: 1;
+}.tc-plugin-info-chunk.tc-plugin-info-description {
+	flex-grow: 1;
+}.tc-plugin-info-chunk .tc-plugin-info-stability {
+	margin-right: 4px;
+	padding: 1px 3px;
+	font-size: 0.8em;
+	border-radius: 4px;
+	font-weight: bold;
+}.tc-plugin-info-chunk .tc-plugin-info-stability-stable {
+	border: 1px solid #008000;
+	color: #008000;
+}.tc-plugin-info-chunk .tc-plugin-info-stability-experimental {
+	border: 1px solid #c07c00;
+	color: #c07c00;
+}.tc-plugin-info-chunk .tc-plugin-info-stability-deprecated {
+	border: 1px solid #ff0000;
+	color: #ff0000;
+}.tc-plugin-info-chunk .tc-plugin-info-stability-legacy {
+	border: 1px solid #0000ff;
+	color: #0000ff;
+}.tc-plugin-info-chunk.tc-plugin-info-buttons {
+	font-size: 0.8em;
+	line-height: 1.2;
+	flex-grow: 0;
+	flex-shrink: 0;
+	text-align: right;
+}.tc-plugin-info-chunk.tc-plugin-info-description h1 {
+	font-size: 1em;
+	line-height: 1.2;
+	margin: 2px 0 2px 0;
+}.tc-plugin-info-chunk.tc-plugin-info-description h2 {
+	font-size: 0.8em;
+	line-height: 1.2;
+	margin: 2px 0 2px 0;
+}.tc-plugin-info-chunk.tc-plugin-info-description div {
+	font-size: 0.8em;
+	line-height: 1.2;
+	margin: 2px 0 2px 0;
+}.tc-plugin-info-chunk.tc-plugin-info-toggle img, .tc-plugin-info-chunk.tc-plugin-info-toggle svg {
+	width: 1em;
+	height: 1em;
+}.tc-plugin-info-chunk.tc-plugin-info-icon img, .tc-plugin-info-chunk.tc-plugin-info-icon svg {
+	width: 2em;
+	height: 2em;
+}.tc-plugin-info-dropdown {
+	border: 1px solid #bbbbbb;
+	background: #ffffff;
+	margin-top: -8px;
+}.tc-plugin-info-dropdown-message {
+	background: #ecf2ff;
+	padding: 0.5em 1em 0.5em 1em;
+	font-weight: bold;
+	font-size: 0.8em;
+}.tc-plugin-info-dropdown-body {
+	padding: 1em 1em 0 1em;
+	background: #ffffff;
+}.tc-plugin-info-sub-plugins {
+	padding: 0.5em;
+	margin: 0 1em 1em 1em;
+	background: #ffffdd;
+}.tc-install-plugin {
+	font-weight: bold;
+	background: green;
+	color: white;
+	fill: white;
+	border-radius: 4px;
+	padding: 3px;
+}.tc-install-plugin.tc-reinstall-downgrade {
+	background: red;
+}.tc-install-plugin.tc-reinstall {
+	background: blue;
+}.tc-install-plugin.tc-reinstall-upgrade {
+	background: orange;
+}.tc-check-list {
+	line-height: 2em;
+}.tc-check-list .tc-image-button {
+	height: 1.5em;
+}/*
+** Message boxes
+*/.tc-message-box {
+	border: 1px solid #cfd6e6;
+	background: #ecf2ff;
+	padding: 0px 21px 0px 21px;
+	font-size: 12px;
+	line-height: 18px;
+	color: #547599;
+}.tc-message-box svg {
+	width: 1em;
+	height: 1em;
+	vertical-align: text-bottom;
+}/*
+** Pictures
+*/.tc-bordered-image {
+	border: 1px solid #bbbbbb;
+	padding: 5px;
+	margin: 5px;
+}/*
+** Floats
+*/.tc-float-right {
+	float: right;
+}/*
+** Chooser
+*/.tc-chooser {
+	border-right: 1px solid #f0f0f0;
+	border-left: 1px solid #f0f0f0;
+}.tc-chooser-item {
+	border-bottom: 1px solid #f0f0f0;
+	border-top: 1px solid #f0f0f0;
+	padding: 2px 4px 2px 14px;
+}.tc-drop-down .tc-chooser-item {
+	padding: 2px;
+}.tc-chosen,
+.tc-chooser-item:hover {
+	background-color: #f0f0f0;
+	border-color: #a8a8a8;
+}.tc-chosen .tc-tiddlylink {
+	cursor:default;
+}.tc-chooser-item .tc-tiddlylink {
+	display: block;
+	text-decoration: none;
+	background-color: transparent;
+}.tc-chooser-item:hover .tc-tiddlylink:hover {
+	text-decoration: none;
+}.tc-drop-down .tc-chosen .tc-tiddlylink,
+.tc-drop-down .tc-chooser-item .tc-tiddlylink:hover {
+	color: #333333;
+}.tc-chosen > .tc-tiddlylink:before {
+	margin-left: -10px;
+	position: relative;
+	content: "» ";
+}.tc-chooser-item svg,
+.tc-chooser-item img{
+	width: 1em;
+	height: 1em;
+	vertical-align: middle;
+}.tc-language-chooser .tc-image-button img {
+	width: 2em;
+	vertical-align: -0.15em;
+}/*
+** Palette swatches
+*/.tc-swatches-horiz {
+}.tc-swatches-horiz .tc-swatch {
+	display: inline-block;
+}.tc-swatch {
+	width: 2em;
+	height: 2em;
+	margin: 0.4em;
+	border: 1px solid #888;
+}input.tc-palette-manager-colour-input {
+	width: 100%;
+	padding: 0;
+}/*
+** Table of contents
+*/.tc-sidebar-lists .tc-table-of-contents {
+	white-space: nowrap;
+}.tc-table-of-contents button,
+.tc-table-of-contents .toc-item-muted {
+	color: #acacac;
+}.tc-table-of-contents svg {
+	width: 0.7em;
+	height: 0.7em;
+	vertical-align: middle;
+	fill: #acacac;
+}.tc-table-of-contents ol {
+	list-style-type: none;
+	padding-left: 0;
+}.tc-table-of-contents ol ol {
+	padding-left: 1em;
+}.tc-table-of-contents li {
+	font-size: 1.0em;
+	font-weight: bold;
+}.tc-table-of-contents li a {
+	font-weight: bold;
+}.tc-table-of-contents li li {
+	font-size: 0.95em;
+	font-weight: normal;
+	line-height: 1.4;
+}.tc-table-of-contents li li a {
+	font-weight: normal;
+}.tc-table-of-contents li li li {
+	font-size: 0.95em;
+	font-weight: normal;
+	line-height: 1.5;
+}.tc-table-of-contents li li li li {
+	font-size: 0.95em;
+	font-weight: normal;
+}.tc-tabbed-table-of-contents {
+	display: -webkit-flex;
+	display: flex;
+}.tc-tabbed-table-of-contents .tc-table-of-contents {
+	z-index: 100;
+	display: inline-block;
+	padding-left: 1em;
+	max-width: 50%;
+	-webkit-flex: 0 0 auto;
+	flex: 0 0 auto;
+	background: #d8d8d8;
+	border-left: 1px solid #cccccc;
+	border-top: 1px solid #cccccc;
+	border-bottom: 1px solid #cccccc;
+}.tc-tabbed-table-of-contents .tc-table-of-contents .toc-item > a,
+.tc-tabbed-table-of-contents .tc-table-of-contents .toc-item-selected > a {
+	display: block;
+	padding: 0.12em 1em 0.12em 0.25em;
+}.tc-tabbed-table-of-contents .tc-table-of-contents .toc-item > a {
+	border-top: 1px solid #d8d8d8;
+	border-left: 1px solid #d8d8d8;
+	border-bottom: 1px solid #d8d8d8;
+}.tc-tabbed-table-of-contents .tc-table-of-contents .toc-item > a:hover {
+	text-decoration: none;
+	border-top: 1px solid #cccccc;
+	border-left: 1px solid #cccccc;
+	border-bottom: 1px solid #cccccc;
+	background: #cccccc;
+}.tc-tabbed-table-of-contents .tc-table-of-contents .toc-item-selected > a {
+	border-top: 1px solid #cccccc;
+	border-left: 1px solid #cccccc;
+	border-bottom: 1px solid #cccccc;
+	background: #ffffff;
+	margin-right: -1px;
+}.tc-tabbed-table-of-contents .tc-table-of-contents .toc-item-selected > a:hover {
+	text-decoration: none;
+}.tc-tabbed-table-of-contents .tc-tabbed-table-of-contents-content {
+	display: inline-block;
+	vertical-align: top;
+	padding-left: 1.5em;
+	padding-right: 1.5em;
+	border: 1px solid #cccccc;
+	-webkit-flex: 1 0 50%;
+	flex: 1 0 50%;
+}/*
+** Dirty indicator
+*/html body svg.tc-image-save-button-dynamic .tc-image-save-button-dynamic-clean {
+	visibility: visible;
+}html body svg.tc-image-save-button-dynamic .tc-image-save-button-dynamic-dirty {
+	visibility: hidden;
+}html body.tc-dirty svg.tc-image-save-button-dynamic .tc-image-save-button-dynamic-clean {
+	visibility: hidden;
+}html body.tc-dirty svg.tc-image-save-button-dynamic .tc-image-save-button-dynamic-dirty {
+	visibility: visible;
+}html body.tc-dirty span.tc-dirty-indicator, html body.tc-dirty span.tc-dirty-indicator svg {
+	fill: #ff0000;
+	color: #ff0000;
+}/*
+** File inputs
+*/.tc-file-input-wrapper {
+	position: relative;
+	overflow: hidden;
+	display: inline-block;
+	vertical-align: middle;
+}.tc-file-input-wrapper input[type=file] {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	font-size: 999px;
+	max-width: 100%;
+	max-height: 100%;
+	filter: alpha(opacity=0);
+	opacity: 0;
+	outline: none;
+	background: white;
+	cursor: pointer;
+	display: inline-block;
+}::-webkit-file-upload-button {
+	cursor:pointer;
+}/*
+** Thumbnail macros
+*/.tc-thumbnail-wrapper {
+	position: relative;
+	display: inline-block;
+	margin: 6px;
+	vertical-align: top;
+}.tc-thumbnail-right-wrapper {
+	float:right;
+	margin: 0.5em 0 0.5em 0.5em;
+}.tc-thumbnail-image {
+	text-align: center;
+	overflow: hidden;
+	border-radius: 3px;
+}.tc-thumbnail-image svg,
+.tc-thumbnail-image img {
+	filter: alpha(opacity=1);
+	opacity: 1;
+	min-width: 100%;
+	min-height: 100%;
+	max-width: 100%;
+}.tc-thumbnail-wrapper:hover .tc-thumbnail-image svg,
+.tc-thumbnail-wrapper:hover .tc-thumbnail-image img {
+	filter: alpha(opacity=0.8);
+	opacity: 0.8;
+}.tc-thumbnail-background {
+	position: absolute;
+	border-radius: 3px;
+}.tc-thumbnail-icon svg,
+.tc-thumbnail-icon img {
+	width: 3em;
+	height: 3em;
+	
+-webkit-filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3));
+	-moz-filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3));
+		filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3));
+
+}.tc-thumbnail-wrapper:hover .tc-thumbnail-icon svg,
+.tc-thumbnail-wrapper:hover .tc-thumbnail-icon img {
+	fill: #fff;
+	
+-webkit-filter: drop-shadow(3px 3px 4px rgba(0,0,0,0.6));
+	-moz-filter: drop-shadow(3px 3px 4px rgba(0,0,0,0.6));
+		filter: drop-shadow(3px 3px 4px rgba(0,0,0,0.6));
+
+}.tc-thumbnail-icon {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	display: -webkit-flex;
+	-webkit-align-items: center;
+	-webkit-justify-content: center;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}.tc-thumbnail-caption {
+	position: absolute;
+	background-color: #777;
+	color: #fff;
+	text-align: center;
+	bottom: 0;
+	width: 100%;
+	filter: alpha(opacity=0.9);
+	opacity: 0.9;
+	line-height: 1.4;
+	border-bottom-left-radius: 3px;
+	border-bottom-right-radius: 3px;
+}.tc-thumbnail-wrapper:hover .tc-thumbnail-caption {
+	filter: alpha(opacity=1);
+	opacity: 1;
+}/*
+** Diffs
+*/.tc-diff-equal {
+	background-color: ;
+	color: #333333;
+}.tc-diff-insert {
+	background-color: #aaefad;
+	color: #333333;
+}.tc-diff-delete {
+	background-color: #ffc9c9;
+	color: #333333;
+}.tc-diff-invisible {
+	background-color: ;
+	color: #bbbbbb;
+}.tc-diff-tiddlers th {
+	text-align: right;
+	background: #ffffff;
+	font-weight: normal;
+	font-style: italic;
+}.tc-diff-tiddlers pre {
+	margin: 0;
+	padding: 0;
+	border: none;
+	background: none;
+}/*
+** Errors
+*/.tc-error {
+	background: #f00;
+	color: #fff;
+}/*
+** Tree macro
+*/.tc-tree div {
+	padding-left: 14px;
+}.tc-tree ol {
+	list-style-type: none;
+	padding-left: 0;
+	margin-top: 0;
+}.tc-tree ol ol {
+	padding-left: 1em;
+}.tc-tree button {
+	color: #acacac;
+}.tc-tree svg {
+	fill: #acacac;
+}.tc-tree span svg {
+	width: 1em;
+	height: 1em;
+	vertical-align: baseline;
+}.tc-tree li span {
+	color: lightgray;
+}select {
+	color: ;
+	background: ;
+}/*
+** Translink macro
+*/.tc-translink {
+	background-color: #f5f5f5;
+	border: 1px solid #cccccc;
+	padding: 0 3px;
+	border-radius: 3px;
+}div.tc-translink > div {
+	margin: 1em;
+}div.tc-translink > div > a:first-child > h1 {
+	font-size: 1.2em;
+	font-weight: bold;
+}span.tc-translink > a:first-child {
+	font-weight: bold;
+}/*
+** Classes for displaying globals
+*/.tc-global-tiddler-body {
+	padding: 0.25em;
+	border: 1px solid #333333;
+	background-color: #bbbbbb;
+	border-radius: 3px;
+}.tc-global-tiddler-body-heading {
+	margin: 0 0 0.25em 0;
+	font-weight: normal;
+}.tc-global-tiddler-body-type {
+	margin: 0 0 0.25em 0;
+	border-bottom: 1px solid #333333;
+}.tc-global-tiddler-body-details {
+	background-color: #ffffff;
+}.tc-global-tiddler-body pre {
+	margin: 0;
+	border: 1px solid #333333;
+}/*
+** Utility classes for SVG icons
+*/.tc-fill-background {
+	fill: #ffffff;
+}.tc-network-activity-background {
+	fill: #448844;
+}/*
+** Test Cases
+*/.tc-test-case-wrapper {
+	border: 1px solid #333333;
+	background-color: #bbbbbb;
+	border-radius: 6px;
+}.tc-test-case-wrapper {
+	background-color: #c1eaff;
+}.tc-test-case-wrapper .tc-test-case-wrapper {
+	background-color: #E3B740;
+}.tc-test-case-wrapper .tc-test-case-wrapper .tc-test-case-wrapper {
+	background-color: #5FD564;
+}.tc-test-case-header {
+	font-weight: normal;
+	margin: 0.5em 0;
+	padding: 0 0.5em;
+}.tc-test-case-divider {
+	x-background-color: #bbbbbb;
+}.tc-test-case-result-icon {
+	fill: #fff;
+	padding: 0.25em;
+	display: inline-block;
+	line-height: 0;
+	border-radius: 1em;
+	vertical-align: text-bottom;
+	margin-right: 0.25em;
+}.tc-test-case-result-icon-pass {
+	background-color: green;
+}.tc-test-case-result-icon-fail {
+	background-color: red;
+}.tc-test-case-result-icon svg {
+	width: 0.5em;
+	height: 0.5em;
+}.tc-test-case-header > h2 {
+	background: #ffffff;
+	border-radius: 4px;
+	padding: 0.25em;
+}.tc-test-case-header > h2,
+.tc-test-case-source > pre {
+	margin: 0;
+}.tc-test-case-header > h2 a.tc-tiddlylink-missing {
+	font-style: normal;
+}.tc-test-case-toolbar {
+	float: right;
+}.tc-test-case-toolbar svg {
+	fill: #cccccc;
+}.tc-test-case-toolbar .tc-drop-down {
+	font-size: 0.8em;
+}.tc-test-case-result-fail {
+	border: 1px solid #333333;
+	background-color: #ffffff;
+	border-radius: 4px;
+	margin: 0 0.5em;
+	padding: 0;
+}.tc-test-case-result-fail-header {
+	background: #ffc9c9;
+	color: #333333;
+	border-top-left-radius: 4px;
+	border-top-right-radius: 4px;
+	padding: 4px;
+}.tc-test-case-result-fail-body {
+	padding: 4px;
+}.tc-test-case-source > pre {
+	height: 100%;
+}.tc-test-case-narrative {
+	padding: 0.5em;
+}.tc-test-case-panes {
+	display: flex;
+	align-items: stretch;
+	flex-wrap: wrap;
+	padding: 0.5em;
+	border-bottom-left-radius: 6px;
+	border-bottom-right-radius: 6px;
+}.tc-test-case-source {
+	flex: 1 0 49%;
+	min-width: 250px;
+}.tc-test-case-source .tc-tab-content {
+	background: inherit;
+	margin: 0;
+}.tc-test-case-source .tc-tab-content .tc-field-table {
+	background: #ffffff;
+}.tc-test-case-source .tc-field-table {
+	width: 100%;
+}.tc-test-case-source table.tc-field-table {
+	margin: 0;
+}.tc-test-case-source .tc-tiddler-frame .tc-edit-texteditor {
+	margin: 0;
+}.tc-test-case-divider {
+	flex: 0 0 1.5%;
+}.tc-test-case-source .tc-tab-buttons {
+	padding-top: 0;
+}.tc-test-case-footer-toolbar {
+	display: flex;
+	justify-content: flex-end;
+}.tc-test-case-output {
+	box-shadow: inset 2px 2px 10px 0px #bbbbbb;
+	background: #ffffff;
+	border-radius: 4px;
+	border: 1px solid #bbbbbb;
+	flex: 1 0 49%;
+	min-width: 250px;
+	padding: 0.25em 1em;
+}/*
+** Flexbox utility classes
+*/.tc-flex {
+	display: -webkit-flex;
+	display: flex;
+}.tc-flex-column {
+	flex-direction: column;
+}.tc-flex-row {
+	flex-direction: row;
+}.tc-flex-grow-1 {
+	flex-grow: 1;
+}.tc-flex-grow-2 {
+	flex-grow: 2;
+}/*
+** Other utility classes
+*//* Horizontal gaps */.tc-tiny-gap {
+	margin-left: .25em;
+	margin-right: .25em;
+}.tc-tiny-gap-left {
+	margin-left: .25em;
+}.tc-tiny-gap-right {
+	margin-right: .25em;
+}.tc-small-gap {
+	margin-left: .5em;
+	margin-right: .5em;
+}.tc-small-gap-left {
+	margin-left: .5em;
+}.tc-small-gap-right {
+	margin-right: .5em;
+}.tc-big-gap {
+	margin-left: 1em;
+	margin-right: 1em;
+}.tc-big-gap-left {
+	margin-left: 1em;
+}.tc-big-gap-right {
+	margin-right: 1em;
+}.tc-word-break {
+	word-break: break-all;
+}/* Vertical gaps */.tc-tiny-v-gap-bottom {
+	margin-bottom: 3px;
+}
+body.tc-dirty span.tc-dirty-indicator svg {
+	transition: fill 250ms ease-in-out;
+}body .tc-image-cloud-idle {
+	fill: #ffffff;
+	transition: opacity 250ms ease-in-out;
+	opacity: 1;
+	display: unset;
+}body.tc-dirty .tc-image-cloud-idle {
+	opacity: 0;
+	display: none;
+}body .tc-image-cloud-progress {
+	transition: opacity 250ms ease-in-out;
+	transform-origin: 50% 50%;
+	transform: rotate(359deg);
+	animation: animation-rotate-slow 2s infinite linear;
+	fill: #ffffff;
+	display: none;
+	opacity: 0;
+}body.tc-dirty .tc-image-cloud-progress {
+	opacity: 1;
+	display: unset;
+}@keyframes animation-rotate-slow {
+	from {
+		transform: rotate(0deg);
+	}
+	to {
+		transform: scale(359deg);
+	}
+}
+.tc-sidebar-header {
+	text-shadow: 0 1px 0 rgba(255,255,255, 0.8);
+}.tc-tiddler-info {
+	
+-webkit-box-shadow: inset 1px 2px 3px rgba(0,0,0,0.1);
+	-moz-box-shadow: inset 1px 2px 3px rgba(0,0,0,0.1);
+		box-shadow: inset 1px 2px 3px rgba(0,0,0,0.1);
+
+}@media screen {
+	.tc-tiddler-frame {
+		
+-webkit-box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3);
+	-moz-box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3);
+		box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3);
+
+	}
+}@media (max-width: 959px) {
+	.tc-tiddler-frame {
+		
+-webkit-box-shadow: none;
+	-moz-box-shadow: none;
+		box-shadow: none;
+
+	}
+}.tc-page-controls button svg, .tc-tiddler-controls button svg, .tc-topbar button svg {
+	
+-webkit-transition: fill 150ms ease-in-out;
+	-moz-transition: fill 150ms ease-in-out;
+		transition: fill 150ms ease-in-out;
+
+}.tc-tiddler-controls button.tc-selected,
+.tc-page-controls button.tc-selected {
+	
+-webkit-filter: drop-shadow(0px -1px 2px rgba(0,0,0,0.25));
+	-moz-filter: drop-shadow(0px -1px 2px rgba(0,0,0,0.25));
+		filter: drop-shadow(0px -1px 2px rgba(0,0,0,0.25));
+
+}.tc-tiddler-frame input.tc-edit-texteditor,
+.tc-tiddler-frame select.tc-edit-texteditor {
+	
+-webkit-box-shadow: inset 0 1px 8px rgba(0, 0, 0, 0.15);
+	-moz-box-shadow: inset 0 1px 8px rgba(0, 0, 0, 0.15);
+		box-shadow: inset 0 1px 8px rgba(0, 0, 0, 0.15);
+
+}.tc-edit-tags {
+	
+-webkit-box-shadow: inset 0 1px 8px rgba(0, 0, 0, 0.15);
+	-moz-box-shadow: inset 0 1px 8px rgba(0, 0, 0, 0.15);
+		box-shadow: inset 0 1px 8px rgba(0, 0, 0, 0.15);
+
+}.tc-tiddler-frame .tc-edit-tags input.tc-edit-texteditor {
+	
+-webkit-box-shadow: none;
+	-moz-box-shadow: none;
+		box-shadow: none;
+
+	border: none;
+	outline: none;
+}textarea.tc-edit-texteditor {
+	font-family: ;
+}canvas.tc-edit-bitmapeditor  {
+	
+-webkit-box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+	-moz-box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+		box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+
+}.tc-drop-down {
+	border-radius: 4px;
+	
+-webkit-box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+	-moz-box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+		box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+
+}.tc-block-dropdown {
+	border-radius: 4px;
+	
+-webkit-box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+	-moz-box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+		box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+
+}.tc-modal {
+	border-radius: 6px;
+	
+-webkit-box-shadow: 0 3px 7px rgba(0,0,0,0.3);
+	-moz-box-shadow: 0 3px 7px rgba(0,0,0,0.3);
+		box-shadow: 0 3px 7px rgba(0,0,0,0.3);
+
+}.tc-modal-footer {
+	border-radius: 0 0 6px 6px;
+	
+-webkit-box-shadow: inset 0 1px 0 #fff;
+	-moz-box-shadow: inset 0 1px 0 #fff;
+		box-shadow: inset 0 1px 0 #fff;
+;
+}.tc-alert {
+	border-radius: 6px;
+	
+-webkit-box-shadow: 0 3px 7px rgba(0,0,0,0.6);
+	-moz-box-shadow: 0 3px 7px rgba(0,0,0,0.6);
+		box-shadow: 0 3px 7px rgba(0,0,0,0.6);
+
+}.tc-notification {
+	border-radius: 6px;
+	
+-webkit-box-shadow: 0 3px 7px rgba(0,0,0,0.3);
+	-moz-box-shadow: 0 3px 7px rgba(0,0,0,0.3);
+		box-shadow: 0 3px 7px rgba(0,0,0,0.3);
+
+	text-shadow: 0 1px 0 rgba(255,255,255, 0.8);
+}.tc-sidebar-lists .tc-tab-set .tc-tab-divider {
+	border-top: none;
+	height: 1px;
+	
+background-image: linear-gradient(left, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.0) 100%);
+background-image: -o-linear-gradient(left, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.0) 100%);
+background-image: -moz-linear-gradient(left, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.0) 100%);
+background-image: -webkit-linear-gradient(left, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.0) 100%);
+background-image: -ms-linear-gradient(left, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.0) 100%);
+
+}.tc-more-sidebar > .tc-tab-set > .tc-tab-buttons > button {
+	
+background-image: linear-gradient(left, rgba(0,0,0,0.01) 0%, rgba(0,0,0,0.1) 100%);
+background-image: -o-linear-gradient(left, rgba(0,0,0,0.01) 0%, rgba(0,0,0,0.1) 100%);
+background-image: -moz-linear-gradient(left, rgba(0,0,0,0.01) 0%, rgba(0,0,0,0.1) 100%);
+background-image: -webkit-linear-gradient(left, rgba(0,0,0,0.01) 0%, rgba(0,0,0,0.1) 100%);
+background-image: -ms-linear-gradient(left, rgba(0,0,0,0.01) 0%, rgba(0,0,0,0.1) 100%);
+
+}.tc-more-sidebar > .tc-tab-set > .tc-tab-buttons > button.tc-tab-selected {
+	
+background-image: linear-gradient(left, rgba(0,0,0,0.05) 0%, rgba(255,255,255,0.05) 100%);
+background-image: -o-linear-gradient(left, rgba(0,0,0,0.05) 0%, rgba(255,255,255,0.05) 100%);
+background-image: -moz-linear-gradient(left, rgba(0,0,0,0.05) 0%, rgba(255,255,255,0.05) 100%);
+background-image: -webkit-linear-gradient(left, rgba(0,0,0,0.05) 0%, rgba(255,255,255,0.05) 100%);
+background-image: -ms-linear-gradient(left, rgba(0,0,0,0.05) 0%, rgba(255,255,255,0.05) 100%);
+
+}.tc-message-box img {
+	
+-webkit-box-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+	-moz-box-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+		box-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+
+}.tc-plugin-info {
+	
+-webkit-box-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+	-moz-box-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+		box-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+
+}
+/*flex结构的“浮动侧栏”*/
+p:has(.side-col-parent){
+    margin: -0.83em 0;
+}
+.side-col-parent {
+    display: flex;
+}
+.side-col {
+    margin-top: -20px;
+    padding-left: 30px;
+}
+.side-col td {
+    min-width: 100px;
+}/*----- structure */
+.accordion-parent table {
+    margin: 0;
+    border-bottom: 0;
+}
+.accordion-parent table td.block-title-style.sider {
+    border-bottom: 0;
+}
+.accordion {
+    width: 100%;
+    display: table;
+}
+.accordion__title {
+    font-weight: bold;
+    text-align: center;
+	cursor: pointer;
+	transition: .3s ease;
+    border-top: 1px solid white;
+}
+.accordion__content > p {
+    margin: 0;
+    display: table;
+}
+.accordion__content td {
+    padding: 0px 7px;
+}
+.accordion__content.tc-reveal p {
+    width: 100%;
+    margin: 0;
+}.title-style{
+	color:#000000;
+	background-color:#ffffff;
+	width:100%;
+}
+.block-title-style{
+	color:#000000;
+	background-color:#ffffff;
+	width:100%;
+	font-weight: bold;
+	border-top: 3px solid white;
+	border-bottom: 3px solid white;
+}
+.block-title-style.sider{
+	width:15%;
+	border-top: 1px solid white;
+	border-bottom: 1px solid white;
+}
+/*主要用于底部导航中的标题*/
+.force-link-title a, .force-link-title a:visited{
+	color: inherit;
+	text-decoration: none;
+	font-weight: bold;
+}
+.force-link-title a.new, .force-link-title a.new:visited{
+	color: inherit;
+	text-decoration: underline;
+	font-weight: bold;
+}
+/*多个底部导航的切换标签页*/
+.bottom-tabs .tc-tab-content {
+    /*不知为什么，设置成0完全没有用，效果和默认的14一样*/
+    margin-top: -12px;
+}
+.bottom-tabs .tc-tab-buttons{
+    margin-bottom: -1px;
+}
+.stylized {
+    width: 100%;
+    display: table;
+}
+.list-splitter{
+    font-weight: bold;
+    padding-left:0.5em;
+    padding-right:0.5em;
+    min-width:1em;
+}h1{
+   font-size: 1.5em;
+   line-height: unset;
+}
+h2{
+   font-size: 1.2em;
+   line-height: unset;
+   margin-bottom: 0;
+}
+h3{
+   font-size: 1em;
+   font-weight: bold;
+   line-height: unset;
+}
+h3 a.tc-tiddlylink{
+   font-weight: bold;
+}
+h2.compact + p{
+   margin-top: 0;
+}
+strong a.tc-tiddlylink{
+   font-weight: bold;
+}
+.force-link-color a, .force-link-color a:visited{
+	color: inherit;
+	text-decoration: none;
+}
+.force-link-color a.new, .force-link-color a.new:visited{
+	color: inherit;
+	text-decoration: underline;
+}
+/*“折叠”模板用*/
+.collapsable th button{
+   font-weight: bold;
+}
+/*“参考资料”用*/
+.ref-list ul{
+   list-style: none;
+   padding-inline-start: 20px;
+}
+.developer-notes{
+   font-family: serif;
+}
+/* 双删除线 */
+.double {
+    text-decoration: line-through;
+    text-decoration-style: double;
+}
+/* 着重号 */
+.underdot {
+    text-emphasis-style: dot;
+    text-emphasis-position: under left;
+}.go-beyond p{
+    font-family: 华文楷体;
+    background-image: linear-gradient(#7700aa, #662299, #44aa55);
+}.haremu-haremu p{
+    font-family: 汉仪新蒂永乐大典;
+    font-size: 20px;
+    color: #7D253A;
+}.word {
+    font-family: 楷体;
+    font-size: 16px;
+    text-indent: 2em;
+    padding: 1em 0.5em;
+}
+.book h1{
+    font-family: 华文楷体;
+    margin-bottom: 0;
+    margin-top: 2em;
+}
+.book p{
+    margin-top: 0;
+}
+.gradient p{
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    -webkit-box-decoration-break: clone;
+}.published .gradient p{
+    -webkit-background-clip: unset;
+    -webkit-text-fill-color: black;
+    -webkit-box-decoration-break: unset;
+    color: #000;
+    background-image: unset;
+}
+/* 黑幕（From 萌娘百科 CC BY-NC-SA 3.0，有删改） */
+.heimu,
+.heimu a,
+a .heimu,
+.heimu a.new {
+    background-color: #252525;
+    color: #ffe;
+    text-shadow: none;
+    transition: all .14s linear 0s;
+}
+/* 警示条 */
+.warning-banner-out{
+    text-align: center;
+}
+.warning-banner{
+    display: inline-table;
+    border: 0;
+    border-spacing: 3px;
+    border:1px solid #E0E0E0;
+    background-color:#F8F8F8;
+    color:#000;
+    margin:0.5em auto;
+}
+.warning-banner td{
+    padding: 3px;
+}
+</style>
+</head>
+<body class="tc-body">
+
+<section class="tc-story-river tc-static-story-river">
+<a name="超越真实 成稿部分">
+<div class="tc-tiddler-frame tc-tiddler-view-frame tc-tiddler-exists  tc-tagged-%E8%B6%85%E8%B6%8A%E7%9C%9F%E5%AE%9E" data-tags="超越真实" data-tiddler-title="超越真实 成稿部分" role="article"><div class="tc-tiddler-title tc-clearfix"><div class="tc-titlebar"><span class="tc-tiddler-controls"><button aria-expanded="false" aria-label="更多" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fmore-tiddler-actions" title="更多操作"></button><span class=" tc-reveal" hidden="true"></span><button aria-label="复制此条目" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fclone" title="复制此条目"></button><span class="tc-popup-keep"><button aria-expanded="false" aria-label="导出此条目" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fexport-tiddler" draggable="true" title="导出此条目"></button></span><span class=" tc-reveal" hidden="true"></span><button aria-label="编辑此条目" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fedit" title="编辑此条目"></button><button aria-label="关闭" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fclose" title="关闭此条目"></button></span><span><h2 class="tc-title">超越真实 成稿部分</h2></span></div><div class="tc-tiddler-info tc-popup-handle tc-reveal" hidden="true"></div></div><div class="tc-reveal"></div><div class=" tc-reveal"><div class="tc-subtitle tc-clearfix">2025年04月06日 00:01</div></div><div class=" tc-reveal"><div class="tc-tags-wrapper"><span class="tc-tag-list-item" data-tag-title="超越真实"><span aria-expanded="false" class="tc-tag-label tc-btn-invisible" draggable="true" style="background-color:#17500a;fill:#ffffff;color:#ffffff;"><span class="tc-tag-exists">超越真实</span></span><span class="tc-drop-down tc-reveal" hidden="true"></span></span></div></div><div class="tc-tiddler-body tc-clearfix tc-reveal"><div class="book"><h1 class="">第1章 新生活的开始</h1><p>
+<div class="word gradient go-beyond"><p>“伊芙，你真的是个巫师。”</p><p>紫色的光照亮四周，小小的身影抬起头，露出苍白坚定的面孔。</p><p>“那么，小巫师可以去吃饭了吗？蘑菇鸡肉派已经准备好了，还有怀恩夫人的樱桃蛋糕。”</p><p>“我还想看完书……”</p><p>名叫伊芙的女孩慢吞吞地收起书，拖着脚步走向餐厅。她有着漆黑、顺滑的长发，垂下肩背的一块小平面，直达腰际；修剪整齐而薄的刘海；皮肤很白，五官纤巧而漂亮，显现出她父亲——《桑德森的祷词》主演的美好品质。略微上挑的纤细双眉，隔着额上的发丝也隐约可见；幽紫的眼瞳如嵌在石像上的宝石，散发出不可思议的光芒，也传达着主人的早慧与通达；挺直的鼻梁，草莓奶颜色的嘴唇；这张鹅蛋形的小脸充满严肃，仿佛在思考占领一颗遥远的星星。她穿着红白细格纹的无袖上衣、牛仔色的及膝裤，身高对于11岁合适，但相当纤细，是那种属于成长期孩童、即将转变成“少年”的身材。</p><p>她在桌前坐下。热派散发出香气，但她的盘子很冷。叉子很冷。什么都冷。她将木盘上的派拖过来一点，举起刀开始切；管家格里奇怀尔女士试图帮忙，但伊芙示意制止了。过了一会儿，一碟胡萝卜和卷心菜端了上来；她知道这就是今天的晚餐了。</p><p>她的妹妹杰斯还没回来。杰斯更喜欢运动，和朋友聊得开，长相也接近妈妈，有棕色卷发和蓝眼睛；伊芙不讨厌杰斯，但餐桌上只有姐妹二人，在书中往往是遭遇过不测，姐姐不得不承担起家长的义务，配合妹妹的聊天，为她成长提供一片小小的荫蔽、和天真的空间；但伊芙不想聊杰斯热衷的话题，也觉得自己才上中学，担负起这种责任都为时过早。</p><p>伊芙即将进入瀚海魔法学院——“魔法”这个名字是它骄傲的传承，也是学生和家长们精心挑选的加分点之一，和校园环境、升学率、作为中学的声望一起。一百年来，“魔法”改变了太多。</p><p>这个世界上一直存在着超能力。过去，人们无法掌握它，称之为魔法；在祈福的剑和黯淡的水晶球里，它曾经小小影响过某人的命运。但随着许多年来，超能学的发展，让这一赐福不再专属于“魔法师”或“巫师”——这世上每个人或多或少都能使用超能力，只是有些开始会难些。新鲜劲儿过去后，新的能力者们回到工作岗位，超能力也被证明不止属于战场。而使用“魔法”的技艺被称为“传统超能力”继续着，通过漫长的经验与智慧，弥补超能学尚且达不到的地方。</p><p>“伊芙，那你为什么要读魔法学院呢？林奇尔女中不是很好吗？也很适合你。”她曾经被这样问。</p><p>“我对传统的魔法很感兴趣。……况且，实际上瀚海的升学前景并不差，只是你需要做好准备。……我也不喜欢学校只有女生。你知道，这个世界上有女人，也有男人。”</p><p>伊芙这样说着。事实上，她和需要“觉醒”或者“激发”的大部分人不同，似乎天生就有对超能力的掌握。自双手散发而出、暗淡的紫光，和她紫色的眼睛一样，是种被称为“能辉”的现象。一般而言，它是使用超能力的副产物；但能辉也会“染色”人的身体，呈现出与本来不同的头发、眼睛颜色，乃至于终身不褪。这似乎说明除了有意使用之外，人无时无刻不在使用超能力。能辉颜色各异、光效不同，但普遍认为能主动产生能辉现象的人，对超能力的掌控更加顺利，因此从事超能力方面工作的概率也会更大。</p><p>传统上，巫师会借助法杖、魔导书等物体传导能量，或者说魔力；从未使用过这些的伊芙不禁遐想，或许魔法学院像宝库一样陈列着闪耀各色星芒的晶核、或者寄宿着邪灵的雕花铠甲的军队，就像她在博物馆看到的那样。尽管人世上失望乃是常态，伊芙还是劝说自己别想太远；就像她已经试过了校服，并没有一顶尖帽子。
+</p></div>
+
+<div class="word gradient go-beyond"><p>瀚海的秋季校服，深灰色的圆领针织连衣裙，内搭白衬衫、和可自选的领带。被校友评价有些“奇怪”和“古老”，但伊芙喜欢；虽然不是她来瀚海的主要原因，但确实第一眼看到就难忘了。</p><p>第一次，伊芙穿戴着整套的瀚海校服，配深蓝色领带、深灰色长袜和皮鞋，身边是同样雅致而肃穆、单色调的海洋。男生校服是同样深灰色的针织衫；还有些人已经穿上了外套，比一般的校服长很多，像黑色的大衣。按官网上的信息，瀚海有着相当高的留学生比例；伊芙用目光在人群间打探，想找出长相非比寻常的人。虽然因为能力者的“能辉致色”效应，不时飘过更亮眼如浅绿色头发的人物，异国面孔反而不够显眼了。</p><p>隔着一条柏油窄路的角落，列着数幢造型整饬的四层楼房；屋顶呈A字形，覆盖着与窗框搭配的青灰色涂面，却也让伊芙想到里面的三角形空间多逼仄难耐。楼门开向两侧，长方形的雨蓬遮蔽其上，构成小小的景观；门前放着一张桌子，薄薄的蓝色桌面好像塑料，四条直而细的金属腿。几张打印过的白纸置于其上。</p><p>有个深蓝色头发的女孩已经在桌前站着；见伊芙靠近，她抬起头，伊芙才发现她大概来自某个东亚国家。女孩墨蓝色的发丝向后齐梳，挽成平髻；额前平梳开两绺，垂下两鬓犹如龙须，也露出一对清楚又美观的眉毛。她有着大大的杏仁形眼睛，颜色浅蓝，使伊芙想起不化的坚冰；从脸旁粉底的痕迹看来，似乎是因为化妆显得脸色白皙；但她的薄唇也显得苍白。</p><p>女孩穿着瀚海的黑色校服，和伊芙身高相仿；她开口道：</p><p>“请问，你愿意一个人住吗？”</p><p>“什么？”</p><p>在反应过来她说了什么之前，伊芙就试图回绝了。但最终她还是耐着心思听完：</p><p>“我的名字是上桥泠。我……有一些医疗状况，住宿舍不方便，而且我的父母在附近有房子。所以……我就打算搬出去。但是这意味着你就需要一个人住。我知道这么说很突兀……”</p><p>“没问题的。”</p><p>泠愣住了，看来没预计到这种答复。</p><p>“我在家有自己的卧室，我挺喜欢我的私人空间；听说上中学需要住宿舍的时候，哪怕只是两人一间，我还挺担心的……还默默祈祷‘能是个好相处的室友’来着，我不骗你。”</p><p>泠将信将疑的神色逐渐转为释然：</p><p>“那就说定了。”</p><p>伊芙向桌上的名单看去；一年级女生可选的宿舍有六间，分布在二到四层的银蹄铁、银马鬃、银茶花寝室。已经有人填了几个名字；银蹄铁寝室已经要满了，但也有一个叫“希莉埃尔·吉耶莫”的冒险家选择了四楼。犹豫一番后，她在“银马鬃寝室 房间A 床铺1”后面，留下了自己的名字。</p><p>泠也写下了名字。她的字迹整洁漂亮，但兴许是来英国还不太久，还不会写连笔字；和伊芙简短有力的字迹相比，有一种莫名的戏剧感。</p><p>瀚海按规定不许学生外宿；泠也带了一点行李，或许是为了瞒过监督的老师吧。</p><p>费力将行李箱拽上几节台阶，眼前出现了布置着沙发书柜的休息室、两扇小门和一道楼梯。一个戴眼镜的白发女生坐在桌前，同时摊开了四五本书。她短发的末尾和刘海呈现出铅笔画般的浅黑色，不知道哪边是染的；伊芙帮她找到了忘在某层书架的胸牌，发现她就是希莉埃尔。另一个齐整佩戴着绿领带、梳高马尾的女孩本来在讲电话，见到伊芙过来，愉快地介绍她自己叫琳达·苔丝。她身后墙上挂着寝室的名牌，装饰着珍珠缎带和剪贴手绘的花朵，应该是之前的学姐留下的。几个不同色的行李箱停在楼梯口处；伊芙思索着是否需要把自己的并列进来。或者说，她自己先上楼看看？这是她第一次住校；虽然之前也有过学校旅行、或者夏令营之类的经历，但是一整个学年……甚至更长时间，她要在这里住得比家里更久了。</p><p>不过现在，她暂时不用考虑了。</p><p>“咚！“</p><p>轰然一声巨响，有个人影降落在楼前。站姿好像动作片的英雄，乌黑的长发在空中飘扬；穿着无袖外套和西装裙，背后一条尾巴……尾巴？她气宇轩昂地掐掉了耳机的对话，转过身来说：</p><p>“你们好，我的名字是黑莉·希尔卡，是你们魔法通识课的教师。如果遇到住宿问题、能力者袭击、或者需要强大的力量，欢迎随时来找黑莉老师，当然课业问题也是可以的。我很高兴能来瀚海任教，你们都是我见过最棒的孩子。”</p><p>有谁说点什么，快说啊。 伊芙不作声地想着。黑莉也明显在寻找视线，但没有很久。</p><p>“……为什么男生宿舍的反响那么热烈，我应该说了一样的台词啊。”</p><p>她的尾巴垂下来了，但脸蛋上的一丝红润，表示她终于想出了解围之辞，愉快地如释重负。伊芙也和旁边的女孩一起笑了；黑莉看起来不像老师，但和她相处，应该比德高望重的教授来得愉快。</p><p>“已经整理好了？真不错。”黑莉注意到了那堆箱子，“我会帮你们送上去。宿舍敲定了吗？或者我先放到楼梯口。只要里面没有藏着带能生物——你们之前的学姐试图养带翅膀的兔子，能想象吗？‘魔宠’或者‘使魔’听起来有趣，但最终烧掉半个阁楼、不得不搬出去前，那女生已经为打扫衣柜顶的‘颗粒’心力交瘁了。”</p><p>黑莉说到激动，尾巴也跟随着左摇右晃。伊芙听到了一声小小的惊呼：“原来老师的不是使魔吗！”</p><p>“什么？”黑莉明亮的黄眼睛看了过来。</p><p>“不好意思老师！”那女生惊慌道，“我只是在想，人们说女巫会提到黑猫……您背后的尾巴，看起来很像是黑猫的尾巴！我就想到了有时候巫师会和使魔融为一体……我大概搞错了，应该是某种特殊血统，类似狼人那样的……”</p><p>“啊，这个！我确实忘记说了……我的尾巴，你们可以理解成一种‘特殊的传统能力’。</p><p>“你们听说过吧？在‘超能学’正式成为一门科学之前，活跃在欧洲的能力者，除了魔法师，还有狼人、吸血鬼、魔药师、预言家之类……我又说错了什么话吗？为什么这个表情……虽然传统上狼人不被视为人类，但实际上，他们的变身魔法是被传承的技术、而非遗传的血统。……这也就是我为什么能够化形为动物，并且不是传统更常见的狼形，而是猫。</p><p>“好了，都让开些。我要违反校规了……别这样看着我，我在这里住过，你们不会想自己搬上去的。”</p><p>她抓住一只蓝色箱子的提手，检查了一下，随后向楼梯转过身去。</p><p>——当她即将拎起箱子的时候，忽然腾起一道暗金色的幻影；接着一只黑猫衔起行李箱，沿着楼梯踏空奔驰上去了，转眼消失不见。伊芙的双眼根本来不及捕捉，黑色衣裙的青年怎样褪去人类的姿态，结实的手臂和长发好像还没变成残影；或者她只是转移了注意力，看黑猫凌空拖着大几倍的箱子，比起飞行完全就是奔跑，仿佛脚爪落下的时刻，浮现出了不可视的台阶。空中还有暗金色的足迹吗？还是说看形状应该是爪痕？她只是听到楼上传来沉闷的“砰”声；不久之后，黑莉老师一溜小跑下了楼梯，重新出现在学生们面前。</p><p>“好帅……”</p><p>“老师就像超级英雄，没想到还有这样的魔法师……”</p><p>黑莉似乎因热情的回应闪过一丝欣喜，但还是正色道：“你们可以看，但我只是帮忙搬箱子而已；这不是‘让你们见识见识魔法的厉害’。我不是‘大魔法师’，你们也不是‘凡人’‘蒙昧者’。传统能力者曾经被人敬仰，也曾经被人鄙视——因此不必只看它的光环，急于成为我这样的人。当你们做到的那天，我也希望你们像我现在这样，继续平常地对待没有能力的人。”</p><p>还是蛮有一套的，不愧继承了魔法学院的名字。伊芙静静想着，不觉间流露出笑容。</p><p>黑莉来来回回，楼梯口箱子逐渐减少；“得到许可”的同学们纷纷上楼，从天已经黑透的大厅中放松自己。伊芙也随着飞猫的尾焰拾级而上，来到三楼的银马鬃寝室。她的箱子已经在等她了；但一侧房门紧闭，另一侧传出活动的灯光和声响。</p><p>“伊芙？”</p><p>正当她犹豫的时候，一个红发女孩探出了脑袋，胸牌上写着“莱丽·芬德利”。她有着明快的笑容和留长的鬓发，左右两股交叉在喉前。她的领带更红；相比之下短发有些偏向栗色了。</p><p>“你……认识我？”</p><p>伊芙回忆着底楼大厅和校园里的身影。</p><p>“天，我应该先确认一下的！边卡跟我说……边卡是我室友，所以抱歉，你只能睡那一边了。”</p><p>“没问题没问题，也高兴认识你，莱丽。”</p><p>伊芙逃回三楼的公用空间。瀚海的“寝室”是四人组织，据说在真正“魔法学院”时期是一间小屋，学生们同吃同住，过着简朴的生活；但现在的校舍已经是终夜通明的工业建筑，微波炉热剩的茶包摆在玻璃桌台上，每间空调配有两个遥控器。只有古朴的名字还挂在楼梯上，仿佛提醒着某种代代相传、却已逐渐湮没的荣誉。泠说自己不住宿舍，就真的没上来过；或许她的医疗状况真的比外表严重吧。</p><p>那么，这间房间——归我了。</p><p>伊芙从侧面拉开拉链，在地板上展开自己的行李；拾起塑封好的一袋袋衣服，移动进床脚与墙之间的小衣柜。柜子刷成粉白色，散发微弱的化学合成香味，她猜测是某种难得地气味宜人的空气清新剂。课本和未拆封的读物整齐排列到书桌上，占据了直到金属台灯的空间；而不久前台灯还是空桌上的唯一物件。她随后又从防震夹层拿出几个盒子：貌似皮革的表面覆有层叠回旋的暗金色花纹，里面装着颜色异样的石块、羽毛笔和掉光封面的古旧书籍。这些是她搜集来、和“魔法”相关的小东西，她只有家附近和旅游时的纪念品店做来源，所以格外珍贵。还有几本笔记，写满了类似“结界的本质：在空间内排布多个魔法阵，使魔力在其间流动”或者“可能和星河石有关；一定回信托比亚斯”的内容；和一小袋护肤品。伊芙不觉得优等生一定不在乎容貌、专心书本，更会对“年纪这么小根本没必要，都是电视广告害的”的说法嗤之以鼻；虽然某种意义上，她那不断被夸赞英俊的演员父亲，确实通过某种“良性”的压力，给出了潜移默化的影响。</p><p>当她将睡衣铺在床上，突然感到一种“自由”。即使在家中自己的卧室，也需要担心来回走动踩响了木地板，或者竖着耳朵听晚归的母亲打开家门，准备迎接“不经意”的关心。而现在，她不仅合法、合理地独处一室，还会为<span class="underdot">自己想做的事</span>得到奖赏！没有大人会听到响动；邻居的同龄人也不会对此说三道四。当然这不是说她就打算大闹一场——只是从“慢性疾病”变成“健康”的状态，虽然之前也很习惯，但自由与解脱是无可替代的。</p><p>整理了一下带来的日记，她沉沉睡去了，尽管房内有一盏夜灯。
+</p></div>
+
+<div class="word gradient go-beyond"><p>阳光清新而硬脆，像落霜后的苹果。</p><p>伊芙翻了个身，意识到中学生活开始了。</p><p>她按掉手机的闹铃，将手机扔到床较远的角落。电子合成的鸟鸣音被沉闷的咚声代替。今天的课程是数学和历史；尽管课本内容她多少已经看过一遍，中学的老师会以何种形式呈现，依然令人期待。她将皮质制服包挎在单肩，走出卧室——令人安心的生活噪音瞬间涌起。</p><p>伊芙问候了莱丽，以及她的室友边卡。转下楼梯，通过休息室，汇入人流。耀眼的阳光通过窗玻璃照亮了食堂；窗户两两距离很近，夹着窄长条形的白色墙体，使得它们好像只是光幕中的遮断，而非建筑本身。餐厅本身的照明也因此显得晦暗，盛放各式面包、点心和果酱的金属器皿，形成了油画般的光影。但吐司机传来的气味表明她该放低期待；一整排食物的尽头也找不到金枪鱼。她最终拿了吐司、炒蛋、黄油和蓝莓酱，还有一杯牛奶；在犹豫搭配水果的时候，传来了叽叽喳喳的议论声。</p><p>一个高大的男生站在窗边，金色的卷发垂下额前，双眼带有某种调皮的笑意；他长相帅气，但从活泼的表情和校服来看，和伊芙同样是一年级生。此刻，他指挥着一些金黄色的光点，从面前飘去飘回；时而凝聚成星星。他有着明亮的蓝眼睛——比常人略深，好像高纬度的天幕，或南方的大海。</p><p>“这是什么魔法！”</p><p>“你待会儿会和我们一起上课吗？”</p><p>“嗯，”他好像很满足自己受到的关注，“我的名字是罗塔涅夫·安卡列斯金。目前还在学做一名魔法师。”</p><p>议论声平息了一点，但转眼更加热闹。</p><p>“外国人？”</p><p>“他看起来好英俊……”</p><p>“名字好长，我可以喊你罗塔吗？”</p><p>这句提议引起了罗塔涅夫本人的回头。</p><p>“我想在家里，也有人这么称呼我。……‘罗塔涅夫’并不是普通人会有的名字，它实际上来自突发奇想，是一颗星星……但如果可以的话，还希望你们称我为罗塔涅夫。”</p><p>他从窗台上起身，轻快地大步走向餐台，似乎填了过量的小面包进盘子；但伊芙似乎看到了闪过的一丝落寞。</p><p>……受欢迎的同学。</p><p>他来自什么地方？从名字、长相和口音，都像是俄国那边的人。但伊芙知道“夫”或是“娃”应该是姓氏的结尾，而非名字；她不应该就刻板印象作出浅率的推断。他看起来很漂亮，有一种连接着阳光、土地的自信，仿佛来自一个更踏实的地方。但是他看起来又不像没有受过良好教育，和这里其他人一样；瀚海的学生无论本地留学生都应该禀赋优秀，天资慧颖。他这么早就会魔法了，金色是他的本色属性？挺合适的嘛。</p><p>伊芙提前五分钟到达教室。课程大体上进度平稳，但一些她本以为学校会忽略的拓展知识，被提到了还是挺惊喜的。同学们也挺好相处；萨布里娜·弗雷脱口而出“灯是制造光的原材料”，引发全场哄笑；埃德蒙德·耶基斯和卡林·伊拉瑞一直在争论“学校什么时候给我们觉醒技能，还是全都靠自己”，在征求伊芙意见时被英语科老师制裁。</p><p>在她以为一切都将平稳落地时，一个短发墨蓝得接近黑色、小脸苍白得如同生面团、名叫蕾恩·威卡德的小女孩，结结巴巴地靠近了她：</p><p>“请问你知道佩里·怀恩先生吗？”</p><p>伊芙的目光有一丝游移。但她知道避无可避，便重新用幽紫的眼瞳望向对方：</p><p>“没错。……事实上，他是我父亲。”</p><p>蕾恩发出一声几乎不可闻的惊呼，苍白的脸蛋似乎红了几分：</p><p>“我是他的粉丝！……我是说，我一直在看他的电影，不仅最火的《桑德森的祷词》，还有《没有当事人的谋杀》那个罪犯，还有《亮光》……抱歉，我好像自顾自说太多了。但真的能看出来你是他的女儿……”</p><p>伊芙冷静地微笑，优雅地作出了回答；不知不觉中，摆出了媒体镜头前才该有的那种端庄和成熟：</p><p>“那我也替他谢谢你的喜欢。……回家之后，我会把你的喜欢转达给爸爸的。”</p><p>蕾恩看起来对伊芙的回答相当失望；但之后擦肩而过的时候，伊芙仍能时常感受到蓝发少女的“不经意”一瞥。虽然这可能不足大明星罗塔受到关注的十分之一；他和同学们说笑的傻话被当成流行语模仿，他在球场上赢过了出言不逊的二年级学生，几位较年轻的女老师也对他笑颜有加，即使他提交的字迹粗枝大叶又瞎涂乱画，一眼就不是那种老师的宠儿。伊芙也会不知不觉中默默看他；即使她知道她不是那种花痴的少女，她“不一样”。</p><p>至于唯一的“室友”泠，伊芙本以为她也会来寝室住两天；但属于她的那张小床始终空着，一切布置就如第一天，她推开门时一样。伊芙只能在课堂上看到泠脸色苍白地握着笔发呆，一放学就被一辆黑轿车借走，好像某种只有昼间开放的小花。伊芙明白对这样的病体，自己的生活都是奢侈；可是每当倚着围墙望向灰暗阴沉的日落，校园外几分钟路程、但却触手不得的商店，莫名会有一种羡慕的感觉。
+</p></div>
+
+<div class="word gradient go-beyond"><p>《从魔法到超能力：在变化中成长》，任课教师：埃德温娜·瓦莱。</p><p>即使用了明显小一号的字体，这段文字依然漫过了课表的框格边界。排列在“音乐”“数学”“设计与技术”之间，多么不寻常的一门课。</p><p>让人难掩地充满期待。</p><p>然而挤进阶梯教室，只有一位戴眼镜的女教师。她的亚麻色长发不用发圈、而是用一对带有格纹的金属色圆筒固定住，发辫从中蓬松垂下，那模样让人联想起可卡犬。她语气温和地例行问候了学生，介绍了自己毕业的学校和论文，然后摊开着一本厚度如词典的讲义，娓娓道：</p><p>“这里现在可能是一所体面的学校，家长会放心把孩子交给我们；乃至于我能看到来自世界各地的学生，他们都愿意在这里度过人生的一部分。但最初的瀚海，只是一个小小的秘密社团。</p><p>“大概十六或十七世纪，应该是一个德国人——名字叫翰海姆之类的，在英格兰的一栋小房子里邀请了几个朋友，向他们传授‘召唤精灵’或者‘改写命运’的‘魔法’。也有记载说翰海姆只是魔法师的老朋友、或者资助者之类；但总之，相信并希望学到‘魔法’的人在这里聚集下来，他们测量星星、用煮沸药剂的烟雾出神冥想，即使在老魔法师离去后也没有停止。小房子也变成了城镇郊外的几间旅社、再变成某位飞黄腾达者的会客厅；‘翰海姆’这个名字也被英国化，变成了‘瀚海’这样的发音。</p><p>“如果不出意外，瀚海也会像那个年代英国和欧洲层出不穷的魔法社团一样，聚集着少量能力者、骗子和寻求神秘体验的人，并最终当‘神秘’不再神秘时被人所抛弃。但所幸，当时的校长查理·毕肖普怀抱着开放的态度，愿意将‘可控魔法’——这是超能力的早期名字之一——传授给普通人，他的尝试也被最终证明是值得的：二战后，人类第一次‘制造’了超能力，亲眼看着曾经‘没有魔力’的普通人，能够长出翅膀、凭空移动物体，甚至操控天气。而这些‘新生的超能力者’，也纷纷向魔法师、术士求教，学习如何控制自己狂暴的力量。</p><p>“瀚海就这样，成了临时的魔法补习班，然后是永久的。越来越多有天赋的孩子来到了瀚海，他们也终于像老翰海姆的夙愿那样，能创造出属于自己的美丽魔法——同时，也作为我们光荣的毕业生，踏上人生新的台阶。”</p><p>她合上书，目光巡视着面无表情的同学们，有些甚至在逃避她的眼神。</p><p>“这就是魔法吗？”</p><p>“难道说会讲故事就算魔法学校了？”</p><p>“我说服父母来英国读书可不是为了这种东西！”白黑双色短发的勤勉少女，细框眼镜后的玫瑰色眼瞳闪烁着火星，“这里可是在法国已经几乎绝迹的，传承至今的魔法学院，我宁愿在这里承担风险，只为修习极致的魔法——但他们只是把我们当普通的初中生糊弄！”</p><p>“希莉埃尔，冷静一下。”个性阳光的莱丽推开少女的肩膀，“我的父母是魔法师。这里是他们毕业的母校。他们为我选择了一样的学校，我相信他们的眼光一定没问题。……就像他们一直是科尔顿猎犬队的粉丝那样。”她的最后一句话引起小范围的哄笑；在今年奇迹般夺冠之前，科尔顿猎犬一直是英格兰茶余饭后的热门话题，可以用来和老发不动的旧车作比。</p><p>“来之前我还以为瀚海的学生都是魔法师的孩子呢。”边卡·格兰维尔小声说道，她的父亲是他们的艺术老师，这似乎也给了她一种淡淡的神秘氛围。</p><p>“我父亲也会魔法。但是他没教会我什么。”罗塔涅夫说着，心不在焉地随手翻书到没人讲过的一页，天蓝的双眼望着遥远的某方。</p><p>伊芙想评论两句，但瓦莱老师敲了敲她那本讲义，将注意力集中于自身：</p><p>“我很遗憾各位对课堂秩序的不尊重。今天的课程是一系列讲座的总集篇，往后我们会涉及到许多同学们感兴趣的内容：比如各种精巧的魔导器具，它们的内部结构、和设计原理；在欧洲传承数百年，至今仍然在捍卫正义的传统能力者——凤凰骑士；玛丽波莎·莱冰莎博士波澜壮阔的生涯，从她的童年，到实验室复刻超能现象，再到改善能力者的社会地位……你们只是缺乏耐心，以至于忽略了今天的课程，却没想到它是日后‘有意思的东西’的钥匙；就好像只看到未切开的派皮，就断定里面没有馅料的人一样。”</p><p>“但是你知道吗。”</p><p>后排靠墙的座位，顶着一头金色小卷发的艾米莉·廷代尔演戏般地掩着嘴，环顾四周道，</p><p>“瓦莱老师心情不好，是因为她被人甩了。”</p><p>她从衣袋里滑出几张照片，有卷发炸毛的小女孩坐在滑梯末端，人人红眼的派对合影。但大家显然只会注意其中一张：白条砖楼的俯视图，亚麻色长发、两条发辫的女性，穿着棕色毛领外套和长裤，卑微沮丧地垂着头，显然是刚上完课的瓦莱老师。她面对的是个大家尚且陌生的男人，发色像蒙着一层雾；身材消瘦，面貌也不太年轻了，穿一身浅黑色硬布的衣服，却有一种深刻的聪明。</p><p>艾米莉似乎满意于引起的关注，昂着下巴给自己的重磅消息加码：</p><p>“这位是教高年级的拉金·托尼塞勒老师，我多年前在这里的姐姐告诉我，他们俩曾经是同学。……他们两个据说还约会过，但不知怎么没在一起，但结果还是来了一个学校做老师。”</p><p>“还有人说瓦莱一直在瀚海，但托尼塞勒是前几年才做老师的，之前有别的事业……啧啧。”</p><p>热衷于明星八卦的蕾恩·威卡德用她细声细气的嗓音补充道。
+</p></div>
+
+<div class="word gradient go-beyond"><p>伊芙拿到了升上中学以来的第一份考试成绩——数学测验中的第一名。但比起惴惴不安中盼望了好久的激动与欣喜，她只能感到一种淡淡的解脱。她一直教谕自己“比较只会滋生嫉妒与傲慢”，可是拿到那张几乎完美的成绩时，却又觉得自己过分平静，平静得不应如此。</p><p>她依然认真听取从哲人饮鸩到天球运转的一切知识，感动又畏惧于不断接近又遥不可及的真理。总有一天，她会比任何人都更了解这些潜藏在字缕间的奥秘；就像现在，诸多转念间的明悟向她启示的那样。……但随着年岁的增加，她怀疑“相信的力量”也会随着儿时的粉红泡泡城堡一样化为灰烟，变成自己一向和那些大人一样轻视的游戏。可是保持勤勉，保持聪慧，换取一张无瑕的成绩单和漂亮的履历，生活果然是如此无聊的事情吗？她无法忽视乔和萨布里娜打出完美配合后快乐的笑容（即使她们输了比赛），无法不再听走廊中的低语：实践课推迟了，又一次。</p><p>说是出于“安全原因”。</p><p>伊芙明白一所充满年轻魔法师的中学会更难保持安全；她不想走在上学路上被天降的陨石砸中，或者半个班的同学被坏心眼的学长变成鸭子。但迄今为止“魔法”相关的课程仅限于理论；理论又更多偏向宏观的超能学，或总结历史上的元素学、召唤术要点，伊芙甚至没法用来改良她的小魔法阵。</p><p>边卡她们几个魔法师的孩子也热衷于辨识校园里的结界，“我爸爸挥一挥魔杖就搞定了”；但迄今为止，唯一敢在学校直接施法的学生是罗塔。就像那天食堂里一样，他似乎有无意摆弄那些金色火星子的习惯。伊芙曾经目睹他指挥一组飞行的纸团命中讨厌的历史老师；一觉醒来突然歪斜的莱德楼标志，男生们也都说是他炸掉的；还有人宣称那天他被黑莉老师留堂惩罚，是因为用魔法欺负后山的小动物，把它们悬空到离地三米远——虽然伊芙觉得这只能说明他脑子不太灵光。</p><p>还有那天……</p><p>“什么时候能让我们也练一练手嘛？咱一年级学生连放个火球都不会，还担心会把学校炸了？”</p><p>“传下去，黛拉已经会火球术了。”</p><p>“传下去，黛拉放火球把学校炸了，所以我们到现在也没有实践课。”</p><p>“传下去，黛拉把实践课炸死了。”</p><p>“你们！！”</p><p>在这种玩笑褪去吸引力之后，实践课终于还是开了；走进地下一层，伊芙首先感到隐约的潮气，沾湿尘土的味道。走廊顶挂着牌子：“应用超能学”。所谓的教室从头到脚包覆着灰色的平面，除了走廊一侧没有窗子，看起来比排球馆还大，不过也可能只是因为没有桌椅，除了角落上一台三脚机器，几乎空无一物。黑莉和另一名老师，鲁泰布拉塔克斯先生，站进了本应是讲台的地方。
+。走进地下一层，伊芙首先感到隐约的潮气，沾湿尘土的味道。走廊顶挂着牌子：“应用超能学”。所谓的教室从头到脚包覆着灰色的平面，除了走廊一侧没有窗子，看起来比排球馆还大，不过也可能只是因为没有桌椅，除了角落上一台三脚机器，几乎空无一物。黑莉和另一名老师，鲁泰布拉塔克斯先生，站进了本应是讲台的地方。</p><p>“同学们，过去数星期的课堂上，我们回答了许多关于‘魔法’的许多疑问；但我们也十分清楚，有些疑问必须在这里解决——它们的回答可能不是几句阐释、一本课外书，而是全新的东西。”</p><p>伊芙能感受到同学们的激动；这份激动反而让她冷静，过高的期望转变成失望的话，她会是唯一先有预料的人。</p><p>“今天，我们将会练习‘能量放出’——这几乎是一切魔法技艺的基础，也是从古至今，无数人说自己‘难以使出魔法’时，真正需要的东西。”</p><p>黑莉扫视同学们，似乎和这些天冒冒失失、姐姐似的年轻教师不同、突然有了合理的气场。</p><p>“我想你们中一些人已经掌握这个了。能演示一下吗？”</p><p>伊芙举起了手。</p><p>她本以为罗塔涅夫也会举手，毕竟他在那么多人面前展示过，并且还挺自在的。但她毕竟也有着使用魔法的实力。</p><p>她站到人群面前，闭上眼，双臂下垂，但离身体一个角度；双手虚握在空中……</p><p>仿佛离神又忽然回到现实，奇异的触感像是“嗡”的一声，略微发冷。睁开眼睛，她看见熟悉的暗紫色光晕；似乎比在家里花园时更加稀薄微弱，但至少在这间教室和人群之间，是确实存在的。</p><p>“啊！”</p><p>“出现了！”</p><p>伊芙来回看着每一个同学，还不完全确定“她到底做了什么”；她看不出这些眼神中到底是羡慕、好奇还是不解。</p><p>“挺好的。”</p><p>她想走前，鲁泰布拉塔克斯老师拍了她的肩膀，然后对全班说：</p><p>“你们可以看到这位女士的作品，漂亮而均匀的紫色。这是一种被称为‘能辉’的现象；等会儿你们练习的时候，也要注意观察能辉。每个人的能辉颜色不同，对耍不出太多戏法的初学者，也是蛮有意思的。”</p><p>伊芙回到了人群，听两位老师开始讲解如何“放出能量”，乃至“控制自己放出的能量，尝试调整其位置”。她也逐渐无法冷静旁观、只是和自己的“成功示例”对照，而开始尝试模仿他们的描述，想要移动那紫色的光场。教室里越来越喧闹、越来越乱，但她的确看到了各种样式的能辉：光晕，光点，一向行为古怪、但对“魔法技艺”特别认真的希莉埃尔，在黑莉老师兴奋的指导下，放出了棕色、不成型的光团。罗塔涅夫心不在焉地操控他金色的光点游来游去，偏着头说“我还以为能战斗的”；只有伊芙焦急地藏在角落。</p><p>紫色，紫色，紫色……</p><p>魔法一直被视为“不传之秘”，所留下的大部分抄本，也都用模糊的语言描述施法，往往把它形容为“一点灵光”甚至“一场想象”。大部分的魔法书篇幅描写施术的步骤、所消耗的道具，乃至于某年某月某人用此法做了某事，但怎样“把魔力使出来”，怎样“把它集中到一点”，往往只能是师徒相传的心领神会；尽管现代超能学试图破解这个课题，但迄今为止，瀚海的课程指导只能说是隔靴搔痒。也许有些东西真的做不到……</p><p>集中魔力，而不是集中注意力。在视野内找一个点，比如自己的手指，尝试让魔力集中上去……但她好像只是在脑海中反复描绘这个点。就好像从大脑发出“手指运动”的指令，可以移动手指，但是仅在脑中想象手指移动，并不能让它动起来。“使用魔法”的“动作”究竟是什么……</p><p>下课铃响，黑莉趁着学生短暂安静下来，拧下了教室里三脚机器的旋钮：</p><p>“你们可能没注意到，今天的课堂上，这台机器一直开着——它有着类似‘激发器’的机理，能让人更轻松使用魔法，或者拿传统术语来说，就是法杖、水晶球一类的‘魔导器’。所以如果回去之后，发现自己使不出魔法了，不要泄气；这不是你们出错，或者魔力不稳定什么的。——当然如果回去之后敢自己施魔法，这是你们的问题。”</p><p>她的最后一句话迎来了一片哄笑和充满赞许精神的倒彩。不少人看向了罗塔；伊芙怀疑他已经为自己的违规行为受过惩罚了，尽管从男生们的表情看，这显然值得。</p></div>
+</p><h1 class="">第2章 魔法的边界</h1><div class="word gradient go-beyond"><p>那天晚上，伊芙仍然念念不忘于自己即使有仪器的帮助，都没有成功集中能量。作业早就写完了，书也不想去读；她拿着整成一摞的笔记和老魔法书，躲进了通往阁楼的楼梯。</p><p>“Aalis nytmis. ”</p><p>大部分咒语的效果，都无法被现代超能学证实；甚至于不同文化、乃至不同地区之间，咒语都会有变化。伊芙本人也不太相信咒语的效果；假如说A地流传的光亮咒语是“igi”，B地的咒语是“nana”，那在A地说“nana”会如何呢？咒语是真的通过声波的震动影响了什么吗？还是只要相信就可以呢？但一切努力都被否定（并没有）之后，她愿意给出尝试。</p><p>“Defaquitio. ”</p><p>或者这条？</p><p>她努力集中于那团紫光——即使现在，她周围的光芒越发微弱，每一次施法的尝试，也越来越无法心无杂念。如果只是在这片暗紫的能量海中，搅动少许涟漪，应该不难做到的吧；但是那种心领神会的魔力的感知，正在代替为现实的五感、和莫名的忧惧。坐在不该坐的木质楼梯上，黑色连裤袜对于夜晚有些冷，或许她只是一动不动太久了。魔导书、魔石散落在周围的台阶上。虽然室内感觉不到风，但她仿佛可以看到猫头鹰飞过，野猫尖叫。或许这件事本就简单，她真正做的应该是抛除杂念；不要想这些，只是去控制、去施放……</p><p>光。</p><p>悬在面前的光辉，如皓月般明亮，如萤火般不可捉摸。并不像真正的光源那样刺眼，超越平凡能力的魔法光辉。但她很清楚这不是她能做到的。</p><p>——不知何时，上桥泠站在了她的身边。</p><p>她未曾共宿的“室友”。</p><p>“泠？”</p><p>伊芙仰起头，合上书放在膝上。她不知道泠何时回的宿舍；毋宁说，这是她第一次在底层之外的宿舍里，看到多病的少女。</p><p>“你一直在努力。”</p><p>这句话让伊芙脊背发紧。她站起来，思考如何快速收走带来的物品。</p><p>“我没有恶意。只是我知道你的努力是徒劳的。施法并不是这样的。”</p><p>泠直直地注视着伊芙，那双淡蓝的眼睛看不出情绪，但伊芙也无法把它们当作心平气和。今天的泠没有作校服打扮，而是一身月白色的长袍，围着深蓝的腰带，伊芙记得叫“和服”什么的；脑后依然梳着样式古朴的发髻，好像另一个世界的来客。</p><p>“我很遗憾。”</p><p>某种执念驱使着伊芙维持表面的尊严，冷冷答道。</p><p>泠微微垂下双眸，似乎在思考什么伊芙不可见的存在；一时间仿佛有物体在极远的地方涌现，像远古海兽的嘶鸣，朔九寒风的咆哮。但最终她再次望向伊芙：</p><p>“我刚才使用的，叫做灵术。其意思是——‘灵魂的方式’。</p><p>“我是一名灵术师，也就是操控灵术的人。我来瀚海就是来学魔法的。但是这里的课堂与教育，让我失望。</p><p>“魔法有它的底蕴。我来这里时，本以为入门课程会是如何挥动魔杖，或者绘制魔法阵之类的。但结果老师们只是说着‘魔法有太多不同的形态，过早钻研某一门，只会限制他们的想象力’，就开始讲理论了……<span class="underdot">这根本就不是魔法</span>。”</p><p>伊芙怔怔地看着她。虽然少女和自己同龄，但那份冰冷言语中超然稳重的力量，比她读过的所有不知所谓的魔法书都要厚重。她一直以来坚信的世界——不，是根本从未想过需要“相信”，而非既成事实的世界，和太阳每天升起落下一样确定——越过了某处的边界，正在分崩离析。</p><p>但也如电影中灰暗的谎言世界破碎之后，会有一个更鲜亮、真实的本来面目，伊芙从心底里期待着。（尽管此时感受到的，还更多是恐惧。）</p><p>泠抬手向空中，伊芙能看到她的袖口宽大，绣了一层腰带一样深蓝色的边，隐隐的花纹似竹叶；但她指间仿佛多了一样东西——泠将其握在手中，像用笔书写一样，在空中留下了燃烧着的字迹。</p><p>伊芙看不懂，但那字迹蜿蜒在阶梯与廊道的昏暗里，好像仍然鲜红着的余烬。</p><p>“你是一个有悟性的人。我是说，和其他人不一样。尽管他们进了一所名叫‘魔法’的学院，自以为和古代的巫师一样，但他们并不具有这种天赋。至少就灵术师的传承而言，远不是填写一张表格、通过考试和列举奖杯那么简单；我想真正的魔法也是如此。</p><p>“你现在还是连光球都无法召唤的菜鸟魔法师，甚至达不到这所学校的毕业标准。但是有一天，你甚至能拥有自己的灵术。”</p><p>伊芙下意识地张开了嘴，尽管她完全没有什么话能说。泠转过身，以一种无论怎么看都不可能的方式，穿过了封锁阁楼的栏杆。</p><p>已经无法在这里多待了。</p><p>伊芙几乎忘记了收拾散落一地的魔法书、晶石和各异的施法素材，但她再次准备离开时，萌生了新的冲动。</p><p>她挥手。</p><p>——一道紫色的光，明确地游移了，像溪水中的游鱼，跟随她刚才手的动作。比她之前放出的光更有实体，似乎是一块条状的水晶，颜色也不再紫得均匀，隐隐透露出黑色的质料。她感觉心的某个地方被触动了；泠刚才纵使令她震惊的一席话，应该没有如此的效果，是因为亲眼见证了灵术而“激起”的吗？或者……她方才许久的尝试，不全是虚幻？伊芙突然感觉心跳得好快，已经不适合在楼梯再待下去了；好想手舞足蹈，大闹一番，虽然大概她还是只会趴在自己房间的床上，在忘却前奋笔疾书尽可能多地记录吧。</p></div><div class="word gradient go-beyond"><p>在那之后，伊芙一直把这个小小的秘密藏在胸口。她还没有准备好分享这份喜悦，或者没有分享这份喜悦的人。即使泠也没有表现出熟悉或惊喜，当伊芙为组成科学课小组过来找她，而只是淡淡地说道“可以哦”。但伊芙以为一切将这么过去之时，转折悄然而至。</p><p>那棵大悬铃木开始变得黄绿间杂的季节，斯普林特楼。</p><p>伊芙受艺术课格兰维尔老师的命令，取去年学生的视觉创意作业。但资料室的老师给了她闭门羹，她只得踏着不算轻快的步伐，沿不熟悉的路径返回——而就在这时，一个谜一样的身影，飘然出现在小巷中央。</p><p>靛紫色的一只猫，竖起高高的如羽毛的尾巴，四爪悄无声息地向她走来；青金石与深紫的色彩流淌在它身上，像游荡在银白丝绸的水光。猫不可能是靛紫色的；但伊芙停止在路中央，就那么目睹它接近，直到停留在她脚边。有一瞬间，伊芙甚至冒出了“弯下腰摸它脑袋”的想法；但她随即就知道不能这么做——因为那猫形的生物腾空而起，好像融化成了一团烟雾，一片紫色的云。但她仍然能清晰看到它的眼神和耳朵。伊芙加快脚步，与它以相反的方向擦身而过；她看到不远处的前方，罗塔、莱丽还有一群男生带着球鞋和水瓶，显然刚从运动场出来；但罗塔身边穿着号码背心的莫里斯·丢纳尖叫起来：</p><p>“它又来了！猫怪兽回来了！”</p><p>他和那群男生拔腿就跑；如果伊芙还有心情，会发现他们跌跌撞撞忙不择路的身影，好像一群被驱散的鸭子。但鸭子已经被它的老鹰追上；瘦小的黑发男生卡林·伊拉瑞绊了一跤，摔倒在地，莱丽见状赶紧折返回来，拉住他的手臂。——卡林的上半身连同长外套被拽了起来，露出一段白皙的小腿，但他穿着长袜的脚踝被一阵黑雾缠上——</p><p>“卡林！”</p><p>莱丽爆发出一阵惊叫，随即伸出的左手中，爆发出一阵温暖、橙红色的光明；像飞翔的郁金香花瓣；但下一瞬间那种东西消散了，就像正统的作品里，光明驱散黑暗一样。</p><p>卡林挣扎着从挎包翻出什么东西，尽管他的动作因为仍然被莱丽拉着、黑雾也仍然禁锢着他的脚踝而变形：“如果能帮上忙的话，我带着一根妈妈给的魔杖，虽然我还不会使用……”</p><p>莱丽接过那根和指挥棒差不多尺寸的魔杖，对准化形为黑雾的怪猫用力一戳——但效果甚至还不如徒手；魔杖的尖头只冒出了微弱的火星，好像单凭挥舞的力量才让她把黑雾分散少许。但雾越来越浓了；即使站位较远的伊芙也能感觉到空气压抑、憋闷，像被装进了无形的袋子里。</p><p>“卡林，罗塔涅夫，我们不能在这里等死！想想办法！”莱丽喊道，紧张而绯红的脸色掩盖不住她的皮肤正越来越苍白。伊芙无法想象“他们真的会死在这儿”；这种震撼的场面对她来说还宛如荧幕那头的电影一样。但无法移动的脚步是真实的。她站在距离三人几步远的地方，在透不过气的沉默中看着卡林长满乱糟糟黑发的脑袋渐渐垂了下来，抱着他的红发女孩也逐渐力不从心；怪猫也从那团黑雾中逐渐现出形体，依然是蓝紫的皮毛，尾巴猎猎如同旗帜，无风独自飘。它自顾自地坐下，将尾巴绕到前爪，似乎还裂开嘴巴打了个哈欠。在它视线的死角，伊芙紧紧攥着她的皮书包，仿佛这是她熟悉的校园生活的唯一希望；她反复尝试着凝聚魔力，唤出一道道黑紫色流光，却总在撞上黑雾前就变形涣散。环绕视界的雾气不时变得稀薄，赐予她微小的希望；但耗尽全身力量的突刺也只带来反复的懊恼。就连她自己也没有留意，她开始在记忆中反复描绘那天与泠楼梯相会、见证灵术的场面；如果那场邂逅唤醒了她的魔法才能，那或许……</p><p>不，还是不行。视野再次投向倒下的卡林、莱丽，和低声咒骂着“我怎么会困在这里”，对似乎逐渐缠上他肢体的黑雾进行扭打顽抗的罗塔，伊芙觉得她或许该鼓起勇气，成为那个被托付命运的人——</p><p>这种故事不是很常见吗？众人为之忌惮的魔兽，或是受诅咒之人，但其实唯有主角能与之沟通，了解其脆弱或纯洁的内心。因为只有主角敢和它接近，主角也被视为“不祥的同党”；但最终用沟通能力、和魔兽的强大力量，同时拯救了魔兽，和陷入偏见的人们……刚才，那只“猫”只朝向她走来。</p><p>“放开他们。”她低语道。</p><p>猫儿羽毛般蓬松的尾巴上流淌着紫色的光辉。它没有转头，甚至没弹动耳朵。</p><p>“你听得到我说话吧。”</p><p>她感觉自己的声音在黑雾构成的井底回响。</p><p>没有回音。</p><p>“放开他们——莱丽和卡林是我的朋友。猫儿，请放开我们。”</p><p>周围仍然是死一般沉默。她想象自己走上前去，温柔地抚摸那只猫的前额，看那团黑雾逐渐退却，小巷重新沐浴斜阳的光辉；用全身意念强迫自己迈开脚步时，她体会到了“勇敢”是多么沉重的分量。</p><p>但她没有完成最后的步骤。</p><p>明亮的金光，仿佛一只金鹰从天顶降落，驱散了黑雾。它是那么温暖，使人想起传说中的天使，披着白衣，驾驶着黄金一样的骏马，传递着好消息。空气一下子变得干燥而轻盈，好像被流淌着金子的火焰烤过一样。黑雾和靛紫的猫儿不见踪影，四周的景物也恢复了颜色；但奇迹的中央并没有别人，只有罗塔涅夫·安卡列斯金穿着校服站在那儿，高大的身躯似乎残留着灼烧的温度，好像一位不可进犯的天使。</p><p>已经近乎跌入一团黑大衣构成的废墟里，卡林抬起了头，以一种夹杂着不可思议、和惊喜的神情：</p><p>“净火？”</p><p>罗塔似乎在咀嚼这个词的英语发音；然后他显然明白了什么，点了点头。</p><p>莱丽以疑惑和关切的表情看了过来。卡林解释道：</p><p>“我听我妈妈说过。那是驱散一切黑暗、将不祥焚烧殆尽，最纯净最温暖的火焰。它不需要特殊的血脉或者师承，但能驾驭它的人很少——净火是一种强大的力量，不允许自己落入不够格的人手里。”</p><p>“唉，是啊……我还是知道我挺了不起的，但这玩意还真酷炫……”</p><p>夕阳为罗塔镀上了一层淡淡的金边，不算漂亮的五官蕴含着一种质朴和煦的力量。伊芙、莱丽和卡林的目光围绕着他，亮晶晶的。</p><p>“不是你，我可能真的要死了。”</p><p>莱丽的声音一反常态地细弱。</p><p>“这是我第一次现实中见到净火……但我马上就知道那是什么了。真的，罗塔……你就像你看起来一样……”</p><p>卡林俊秀的脸蛋上满是震撼。</p><p>“其实我应该想到的，我在小巷里先遇到的那只猫——如果我早警告你们有危险……”</p><p>轮到伊芙表态时，她却忽然无论如何想要揽下责任——或者说，借由这样，她想听到旁人亲口承认“不是她的责任”。仿佛这样可以填满内心深处，某个无瑕却无底的小洞。</p><p>“西尔警告得够快了。”罗塔答道，“而且说实在的，生存感言环节还要持续多久？我觉得我们现在……”</p><p>他比其他人先注意到什么。不远处灌木丛生的小山上，浮现了一个熟悉的身影。</p><p>“伊拉瑞先生，芬德利小姐，怀恩小姐，还有安卡列斯金先生，请等一下我。”</p><p>黑莉·希尔卡，他们的魔法通识课老师，迈着坚实的快步，甩动着黑发与猫尾，向几位走来。
+</p></div><div class="word gradient go-beyond"><p>“黑莉老师，我可以解释……”</p><p>莱丽站了出来，但黑莉挥挥手让她停下：</p><p>“同学们，我能理解你们遇到了多大的危险。实际上，我才是要跟你们说‘对不起’的那一个。</p><p>“一周前，学校里出现了异常魔力的痕迹。魔研组——也就是学校里，负责管理魔法研究的教师们，为此开了数不清的会议；但还是没有确定它的位置。按学校的决定，我们没有公开信息，而是等着它再次出现；我却没想到，再出现时……已经……”</p><p>“我没有受伤哦。”卡林带着勉强的笑容晃了晃脚踝和小腿，“它没有造成什么伤害。”</p><p>“能让异常生物攻击学生，我们就已经晚了。”黑莉的语气蕴含着真切的失落，肩膀垂下，金色的眼眸也失去了亮闪闪的光泽。</p><p>“黑莉老师……”</p><p>“但是，”黑莉强撑着严肃起来，“你们的行为无疑也违反了校规。尤其是你，罗塔涅夫，你已经不是第一次了——考虑到你那次破坏莱德楼的标志，还是我出面担保才能作为意外处理（罗塔显得吃了一惊），我实在不知道这次校方会拿你怎么办。”</p><p>“这不公平。”伊芙望着地面。</p><p>“是不公平。所以，我一直在考虑，如何让你们全身而退。我想我已经有了一个主意。”</p><p>黑莉的身边，不知何时多了一个身着淡黄色西装的男人。</p><p>“托尼塞勒老师是魔研组的资深成员，之前开会时他肯定了我的意见：给学生提供更早、也更多亲自实践魔法的机会。现在，我们的提案已经得到校董点头通过，在学校增加魔法实践相关的社团——”</p><p>“是允许魔法实践的社团。”男人说，“这两者之间是存在差别的。”</p><p>黑莉点头：“总之，可能有一些麻烦的文书工作，但我们已经拿到了许可；如果你们愿意成为新社团的第一批成员的话，他们就会消除此前‘违规使用魔法’的记录。同学们，我知道没有学长带领、独自成立社团可能并不容易；但我觉得这比乖乖接受惩罚好。何况我也不那么认可魔研组‘安全高于一切’的方针；你们今天表现出的勇敢、还有使用魔法的才能，不应该这样被埋没。”</p><p>压抑的局面被她的话语注入了一丝生机，好像艰难攀出水泥的柳芽。伊芙感觉今天发生了太多事，以至于“社团活动”听起来像毫不相干的遥远记忆。成立社团……意思是，他们会像其他人练习足球或大提琴那样，下课后聚在一起练习魔法吗？这听起来倒才有“魔法学院”的样子……但某种自诩为早慧的哲学，让她难以相信。</p><p>“我同意加入。”罗塔说，“反正不会比新旧账一起算更糟了。”</p><p>“我也是。”</p><p>“我加入……等等，我好像并没有使用魔法吧，我一定加入不可吗？”</p><p>“每个人的选择都是自由的。”黑莉回答道，“但是芬德利小姐使用的魔导器是你提供的，因此如果追究起来你仍有责任。”</p><p>卡林泄气地站回了莱丽身边。</p><p>接着就到伊芙了。除了同意，她也别无他法，不是吗？但在一副描绘出的热烈图景当中，她仍凝视着那较为阴暗的角落：</p><p>“我有一个问题。</p><p>“假如加入社团真的是好事，为什么能作为免除惩罚的条件？”</p><p>“问得好。”托尼塞勒答道，但伊芙从黑莉的脸上捕捉到了一丝“你竟然说了这个”的惶恐。</p><p>“在瀚海的教师中，不乏有热爱魔法、真心想做事情的人。有些人甚至为此拒绝了大学的邀请。但是，研究魔法并不只是读读书，在自己的地下室里施施法的事情；和所有的学问一样，它需要观察、收集大量的数据，只研究自己的魔法师终将一无所获。然而，这就是许多瀚海教师——同时也是魔法师，面临的困境。</p><p>“即使现在实践课不足的情况下，瀚海的学生仍然在使用魔法，并逐步完善他们的施法技艺，变得成熟。这些过程产生了许多有意思的数据；而这还不够。我真的希望，不止成为仅对一门课程负责、上完即换的‘老师’，而是真正的、足以见证一段段崭新人生的‘师长’。你们放心，我不会给你们额外布置任务、或者用你们做实验什么的；只要你们定期在社团使用魔法，我们就能收集到足够的数据。”</p><p>伊芙顿了顿。</p><p>“使用魔法中遇到的问题，我能问你吗？”</p><p>“可以。”</p><p>伊芙知道已没有回旋余地了；刚才她尽可能多为自己争取到了什么。但再度望向莱丽、卡林和似乎又摆弄起他的能辉的罗塔，她知道有些东西不一样了。他们仍怀有各自的迷茫和憧憬，但命运已经被联结起来；他们成为了一条船上的战友，尽管并非出于自己的选择。她想，就像某些书中所写的一样，她也终于找到了可以称为“朋友”的东西。
+</p></div><div class="word gradient go-beyond"><p>尽管已经得到许可，成立社团的道路依然远远称不上“一帆风顺”。拉金·托尼塞勒负责高年级的魔法专业课，神龙见首不见尾；黑莉·希尔卡也忙于上课、管理班级，还得加入魔研组的会议和巡逻工作。还是好心的设计与技术科老师埃娃·贝蒂斯告诉他们，几位资深教师已经防备起了“拉金的小把戏”，并建议他们调整名义为“英国魔法以外的传统超能力研究”。</p><p>“越来越多有趣的孩子进入瀚海了。会成为什么样，我也挺期待的。”她笑吟吟地说。</p><p>贝蒂斯老师身宽体胖，发色灰白，一直是那种作业都不太布置的老好人。不过当伊芙他们走进图书馆，翻阅过艰涩的东欧动物化形者记录、真假参半的异常生物图册、一世纪自动魔像和魔力储能武器的描写，才知道自己刚刚接受的善意是多沉重的分量。</p><p>“好了，你们有人了解日本或者灵术吗？”注视着卡林和罗塔慢吞吞停下笔，伊芙用清冷的声音说；因为一向擅长读书和学习，不知不觉间她成了这个图书馆徘徊小组的领导者，带着几个毛手毛脚、或者细声细气的一年级学生在高大的木质色书架间上蹿下跳，忘记撕下的便利贴夹在书中像一串尾巴。</p><p>“日本？”</p><p>“你们不会还不知道上桥泠要来吧。没错，我的室友。那个经常请病假的东方女孩。”伊芙觉得自己在转达“决定”这一点有些荒谬；她并非那种消息灵通，整天黏在师长身边的人。</p><p>“我知道，但是她真的能加入我们吗？我是说，我从来没有听她说过哪怕一句话。”</p><p>“至少英语课说过。”</p><p>莱丽打断了伊芙和罗塔的争论：“既然她要来，那就证明她也受过处罚。上桥小姐还不适应英国的环境，生活在这里对她本来就艰难，可能一不小心就犯了什么错误；还是给处境相似的人稍微放点尊重吧？大家？”</p><p>伊芙轻轻点头，想着灵术的事情：“挺好，这样我们绝对称得上‘跨文化交流社’了。”</p><p>又一次边犯难边偷写作业的图书馆时间，黑莉从背后出现，愉快地恭喜他们度过了“最漫长和艰辛的一周”。她将印有证件照和“社团成员证明”的卡片一一递交给伊芙、罗塔、卡林、莱丽和泠；卡片接触到泠那冰冷的手指时，她不自觉地“嗯”了一声。</p><p>“在想什么吗？”伊芙问。</p><p>“没有。”</p><p>泠的神态又变得拘谨而疏离了，又回到了平日里那个寡言少语、脸色苍白地望着上课时的窗外的女生；那天站在通往阁楼的楼梯间里，手持月光、仿佛从更高的地方洞察这个世界的少女，好像只是用来启迪她灵感的一场梦。</p><p>黑莉补充道，金色眼瞳里残留着那时的歉意：“袭击事件发生后，魔研组更重视了异常生物的问题。我们已经联系了一位愿意处理的专业人士；她已经评估了魔物的活动轨迹与风险，一切很快就可以结束了。”</p><p>“很快的话现在就结束啊！”罗塔向着她的背影吐槽道。</p><p>拿到了成员证明，意味着他们再也不用下课后直奔图书馆，而可以像高年级学生那样使用社团活动中心——一栋建立在下沉式广场的宽大砖楼。分配给他们的房间位于一层，从外面直接能打开前后两扇门；房间里摆着数张被学长学姐涂鸦过的桌椅，还有一叠与人数相等的白纸：</p><p>“1.你对魔法的理解是什么？从他人那里学到的观念，和你自己的领悟，各自对你现在的观点贡献多少？</p><p>2.你从多大年纪开始使用魔法？最初的形态是什么？身边人对此怎么评价？</p><p>……”</p><p>伊芙很想坐下来慢慢回答这些问题；她有许多想说的话，关于魔法，关于超能力，关于一直以来耐心解答问题、但总是语焉不详的大人。但罗塔已经举起那叠问卷，伴随着口头模拟的“咻~”的音效，用他闪烁着金光的魔法将它们吹上天花板，礼花似的飞散得到处都是。一向充满活力的莱丽伸手接住其中一片，罗塔拍上她的肩膀：</p><p>“说起来，你的能力现在怎么样了？”</p><p>“和原来差不多。”莱丽将右手握在胸前，垂下眼眸，一团橙红色的火光从她的手心浮现；几乎能看得到形状，跳动的，如鸡冠，如郁金香；然后光熄灭了。</p><p>“……说实话，你们那天看到我使出来的，应该是迄今最好的一次……早知道当时就多看看了。”她的眼神开始游移，红茶般发色的脑袋也垂了下去。</p><p>“那次你可是为了救我们！很勇敢。”伊芙说。</p><p>“嗯！……反正我们也算是入社了，有很多练习的机会！”莱丽坐回墙边的条形座椅，开始从书包里翻找什么——她还有一根没被没收的魔杖吗？但最终她只是翻出一盒胡萝卜饮料，在卡林面前晃了晃后，扎下吸管喝了起来。卡林深蓝色的双眼转向远处，一副“怎样都好啦”的神情，却还是继续待在了她身边。泠自己找了张稍远的书桌坐下，用铅笔在纸上涂画着陌生的日本文字，好像周围的一切喧嚣都与她无关；在伊芙尝试拉出她旁边的椅子时，也只报以“我还是不舒服，先别跟我说话”。于是伊芙转而向房间中的人群发问：</p><p>“还有人对那只猫感兴趣吗？”</p><p>“猫？……你是说，害我们来这里的魔兽？”</p><p>“那个东西，浑身还带有可怕的黑烟，被缠一下可疼了……伊芙，你不会觉得它长得可爱，就觉得它可怜吧？”莱丽一副“我能理解，但还是安全重要”的样子。卡林探出脑袋，有些画蛇添足地补充道：“是不是听黑莉老师说它要被处理，想出手救它？我可不参与”，清秀的脸上写着“我的理解更胜一筹”。</p><p>“不，我是说……它到底是谁？从哪来？它为什么袭击我们，而为什么黑莉老师对此也三缄其口？既然我们已经来到研究魔法的小组……各位，能不能对魔法稍微更感兴趣一些？”</p><p>伊芙的声音比往日响了；站在半沉入地下的教室，她仿佛置身于政治家演讲的舞台中央。积压已久的好奇，新生活的疑惑，她已经渴望这个答案太久了——久到她认为应该亲手来获取它。</p><p>“说得好，伊芙。”罗塔从天光彻黑的窗边投过来视线，“我也想知道这所学校在隐瞒什么。”</p><p>思路得到了称赞，伊芙感觉受到了鼓舞。她接着说：</p><p>“我相信你们各位来之前，多少都听说过一些瀚海‘非比寻常’的地方。四年级学生在结界迷宫竞速里夺冠啦，校博物馆里的水晶天球仪啦，布置在校园四角的大魔法阵啦，什么的。但是除了和外面一样的文化课程，我们就只有每周一次的实践课——而目前也只是教我们释放能量，用魔力击中和移动物品。这让我们对<span class="underdot">仍埋藏在这所学校中的奥秘</span>一无所知。</p><p>“这所学校里有魔兽在游荡。即使我们面临过它的冲击，甚至努力用魔法赶跑了它，但我们依然缺乏了解。魔兽是什么？它究竟是一只受魔力影响的猫，还是拟态成猫的逸散魔力？现在的超能学界——尽管成功证明了‘魔法’，‘巫术’，‘灵力’等，与现代超能力具有同样的本源，但仍然对他们称为‘传统超能力’的许多东西缺乏解释。比如说咒语。即使经不起双盲实验的检测、也因此被拒绝在课堂里传授，关于咒语的知识几乎在每一个会使用传统能力的文明中都有记载。魔兽也是这样。上世纪的超能学界喜欢证明‘只有人类能掌握超能力’，因此总将魔兽解释为‘化形为兽的人’，或者‘原属于某个人，但逸散出来单独行动的魔力实体’。但即使当时就有很多反对意见，和学者怎么找都找不出‘人类来源’的魔力。而现在，我们有了一个观测的机会。</p><p>“我们对魔力的领悟尚且粗浅，还不足以和它正面对抗——但我觉得持续观察总会产生价值。我已拆开看过了这里的几台超能测定装置；读数很简单，我觉得也能利用它们记录‘那只猫’身上的本色属性，至少能知道它的魔力来自谁，或者谁也不是。”本色属性是超能携带的一种特殊“纹理”，每个人都拥有不同的本色属性，就犹如超能力的“指纹”。“而循着这个思路，我们甚至能查出把魔兽放进校园的人——假如它不是自己跑进来的话。”</p><p>几人的脸上浮现出沉默与敬佩混合的神色。但泠点出了他们忽视已久的问题：</p><p>“它还没有名字吗？”</p><p>“给它起个名字吧。”</p><p>回想起那蓝紫色的身影、羽毛般的尾巴和优雅的姿态，那不应被称为“怪物”、却也无法被称为“猫”的东西，伊芙的脑中有了一串音节：</p><p>“就叫它‘秋洛莎娃’吧。”</p></div></div></div>
+</div>
+</a>
+</section>
+</body>
+</html>
