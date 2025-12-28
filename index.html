@@ -2707,6 +2707,385 @@ body.tc-dirty span.tc-dirty-indicator svg {
 		transform: scale(359deg);
 	}
 }
+.cm-editor {
+	color-scheme: light;
+}.cm-content {
+	caret-color:  !important;
+}.cm-editor ::selection,
+.cm-editor.cm-focused .cm-selectionBackground,
+.cm-selectionBackground,
+.cm-content ::selection {
+	
+	
+	
+	color: inherit !important;
+}.cm-cursor,
+.cm-dropCursor {
+	border-left: 1px solid !important;
+    
+	border-left-color:  !important;
+	border-radius: 4px;
+	
+	min-height: 20px;
+}.cm-activeLine, .cm-activeLineGutter {
+	background-color: rgba(240, 244, 240, 0.75) !important;
+	color: #333333;
+}.cm-gutters {
+	
+	background-color: #bbbbbb !important;
+	background-color: transparent !important;
+	color: #333333 !important;
+	border: none !important;
+}.cm-panels {
+	background-color: #ffffff !important;
+	color: #333333 !important;
+}.cm-panels button[name="close"] {
+	font-size: 25px !important;
+	cursor: pointer !important;
+}.cm-panels.cm-panels-top: {
+	border-bottom: 2px solid #333333;
+}.cm-panels.cm-panels-bottom {
+	border-top: 0px solid #333333 !important;
+}.cm-searchMatch {
+	background-color: #aaefad !important;
+	outline: 1px solid #34c734 !important;
+}.cm-searchMatch.cm-searchMatch-selected {
+	
+}.cm-selectionMatch {
+	
+}.cm-editor.cm-focused .cm-matchingBracket, .cm-editor.cm-focused .cm-nonmatchingBracket {
+	outline: 1px solid #999999 !important;
+}.cm-tooltip-autocomplete > ul > li {
+	font-family:  !important;
+	overflow: hidden;
+}.cm-tooltip-autocomplete > ul > li[aria-selected], .cm-tooltip-autocomplete > ul > li:hover {
+	background-color: #5778d8 !important;
+	color: #ffffff !important;
+}.cm-foldPlaceholder {
+	background-color: transparent !important;
+	border: none !important;
+	color:  !important;
+}@media(max-width:800px) {
+	.tc-editor-toolbar button.tc-btn-invisible:not(.tc-text-editor-toolbar-item-adjunct) {
+		border-radius: 0px;
+		padding: 6px;
+	}
+}/** checkbox switches start **/
+/** https://www.w3schools.com/howto/howto_css_switch.asp **/
+/* The switch - the box around the slider */
+label.btcui-form-switch {
+	position: relative;
+	display: inline-block;
+	width: 36px;
+	height: 12px;
+}/* Hide default HTML checkbox */
+label.btcui-form-switch input {
+	opacity: 0;
+	width: 0;
+	height: 0;
+}/* The slider */
+label.btcui-form-switch span {
+	position: absolute;
+	cursor: pointer;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: #cccccc;
+	-webkit-transition: .2s;
+	transition: .2s;
+}label.btcui-form-switch span:before {
+	position: absolute;
+	content: "";
+	height: 20px;
+	width: 20px;
+	left: -1px;
+	top: -4px;
+	bottom: 4px;
+	background-color: #ffffff;
+	-webkit-transition: .2s;
+	transition: .2s;
+	box-shadow: 0 1px 3px 0 rgba(0,0,0,0.7);
+}label.btcui-form-switch input:checked + span {
+	background-color: rgba(26,115,232,0.5);
+}label.btcui-form-switch input:checked + span:before {
+	background-color: rgb(26,115,232);
+	opacity: 1;
+}label.btcui-form-switch input:focus + span {
+	box-shadow: 0 0 1px #2196F3;
+}label.btcui-form-switch input:checked + span:before {
+	-webkit-transform: translateX(17px);
+	-ms-transform: translateX(17px);
+	transform: translateX(17px);
+}label.btcui-form-switch span {
+	border-radius: 12px;
+}label.btcui-form-switch span:before {
+	border-radius: 50%;
+}div.btcui-form-label {}/*** checkbox switches end ***//** form select elements **/
+.btcui-form-select {
+	appearance: none;
+	background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='12' fill='%235F6368'%3E%3Cpath d='M0 0h24L12 12z'/%3E%3C/svg%3E") calc(100% - 8px) center no-repeat;
+	background-color: rgb(241,243,244);
+	background-size: 10px;
+	border: none;
+	border-radius: 4px;
+	color: rgb(32,33,36);
+	cursor: pointer;
+	max-width: 100%;
+	outline: none;
+	padding: 6px 21px 6px 8px;
+/*	width: 200px;*/
+}input.btcui-form-input {
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	background-color: #ffffff;
+	padding: 6px;
+	color: #333333;
+}input.btcui-form-input:focus {
+	outline-color: #ccc;
+}.btc-list-group {
+	display: flex;
+	flex-direction: column;
+	padding-left: 0;
+	margin-bottom: 0;
+	box-sizing: border-box;
+}.btc-list-group-box-shadow {
+	box-shadow:1px 1px 5px rgba(0, 0, 0, 0.3);
+	border-bottom-left-radius: .25rem;
+	border-bottom-right-radius: .25rem;
+	border-top-left-radius: .25rem;
+	border-top-right-radius: .25rem;
+}.btc-list-group-item {
+	position: relative;
+	display: block;
+	
+	padding: 0 20px;
+	background-color:  #ffffff;
+	border: 1px solid rgba(0,0,0,.125);
+	width: 100%;
+	color: #495057;
+	text-align:	inherit;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between!important;
+	align-items: center!important;
+	word-spacing: 0.1em;
+}.btc-list-group-item+.btc-list-group-item {
+	border-top-width: 0;
+}.btc-list-group-item:first-child {
+	border-top-left-radius: .25rem;
+	border-top-right-radius: .25rem;
+}.btc-list-group-item:last-child {
+	border-bottom-left-radius: .25rem;
+	border-bottom-right-radius: .25rem;
+}.btc-list-stream-settings {
+	font-size: 90%;
+}input.btc-search-input {
+    display: block;
+    width: 100%;
+    height: calc(1.5em + .75rem + 2px);
+    padding: .375rem .75rem;
+    font-size: 0.8rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #495057;
+    background-color:  #ffffff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: .25rem;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+    margin-bottom: 0.75em;
+}input.btc-search-input:focus {
+	color: #495057;
+    background-color: #ffffff;
+    border-color: #80bdff;
+    outline: 0;
+    
+}.cm-button {
+	background-image: none !important;
+	border-radius: 2px;
+	border: none !important;
+	user-select: none;
+	cursor: pointer;
+}.cm-completionDetail {
+	font-style: normal !important;
+}.cm-autocomplete-tooltip {
+	border-radius: 4px;
+	border: none !important;
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+	padding-top: 4px;
+	z-index: 10001 !important;
+	
+}.cm-autocomplete-option {
+	border-radius: 2px !important;
+	margin: 2px 4px;
+	z-index: 10001 !important;
+}.cm-completionInfo {
+	border: none !important;
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+	border-radius: 4px;
+	min-width: 300px;
+	min-height: 50px;
+	margin-left: 2px;
+	z-index: 10001 !important;
+}.cm-snippet-preview,
+.cm-image-preview {
+	overflow-y: auto;
+	min-width: 300px;
+	max-height: 300px;
+	border-radius: 4px !important;
+	padding-right: 8px;
+	z-index: 10001;
+}.tc-tiddler-preview {
+	grid-template-columns: repeat(2, minmax(0px, 1fr));
+}.cm-completionMatchedText {
+	font-weight: bold;
+	text-decoration: none !important;
+}.cm-autocomplete-tab {
+	float: right;
+	display: inline-block;
+	border: 1px solid #ccc;
+	border-radius: 3px;
+	padding: 0 2px;
+	opacity: 0;
+	scale: 0.8;
+}
+li[aria-selected] {
+.cm-autocomplete-tab {
+	opacity: 1;}
+}.group-category {
+	position:absolute;
+	top:0;
+	right:0;
+	font-size: 12px;
+	background-color: lightgray;
+	padding: 0 5px;
+	opacity: 1;
+	transition: opacity 0.5s;
+	transition-delay: 0.3s;
+	text-transform: capitalize;
+}
+
+
+
+.cm-highlightTab {
+    opacity: 0.3 !important;
+}
+.cm-tooltip.cm-tooltip-autocomplete > ul {
+	max-height: 15em !important;
+}.tc-edit-texteditor-body  {
+	overflow: inherit !important;
+}.o-tm-cm .tc-modal,
+.o-tm-cm .tc-modal-header,
+.o-tm-cm .tc-modal-body,
+.o-tm-cm .tc-modal-footer {
+  border: none;
+  background-color: #f5f5f5;
+}.o-tm-cm .tc-modal-header {
+	border-radius: 10px 10px 0 0;
+}.o-tm-cm .tc-modal {
+	border-radius: 10px;
+}.o-tm-cm .tc-modal-footer {
+	border-radius: 0 0 10px 10px;
+}@media (max-width: 500px) {
+.o-tm-cm .tc-modal {
+	width: 95% !important;
+}
+}.o-tm-cm .tc-modal-footer {
+  
+}.o-tm-cm .tc-modal-backdrop {
+  cursor: pointer;
+}.cm-changelog-skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}.cm-changelog-skeleton-item {
+  width: 100%;
+  height: 20px;
+  background-color: #f0f0f0;
+  border-radius: 4px;
+  position: relative;
+  overflow: hidden;
+}.cm-changelog-skeleton-item::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.5) 50%, rgba(255,255,255,0) 100%);
+  animation: skeleton-loading 1.2s ease-in-out infinite;
+}@keyframes skeleton-loading {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
+}[data-tiddler-title^="Draft of"] .cm-editor .cm-content {
+	min-height: 40vh;
+}.cm-locked {
+  cursor: not-allowed;
+  
+  user-select: none;
+}.editor-mask {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(255, 255, 255, 0.3);
+  cursor: not-allowed;
+  pointer-events: all; /* 阻止事件穿透 */
+  z-index: 1000;
+  backdrop-filter: blur(0.1px); /* 背景模糊 */
+  -webkit-backdrop-filter: blur(0.1px); /* Safari 支持 */
+}.ai-btn {
+  font-weight: 500;
+  border-radius: 6px;
+  padding: 5px 14px;
+  cursor: pointer;
+  font-size: 15px;
+  outline: none;
+  transition: background 0.18s, color 0.18s, box-shadow 0.18s;
+}.ai-accept-reject-btns {
+  position: absolute;
+  right: 5px;
+  bottom: 5px;
+  z-index: 1000;
+  background: rgba(255,255,255,0.98);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  padding: 15px;
+  border-radius: 6px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}.ai-accept-btn {
+  box-shadow: 0 2px 8px rgba(79,140,255,0.12);
+  background: linear-gradient(90deg, #4f8cff 0%, #38d9a9 100%);
+  color: #fff;
+  border: #38d9a9;
+}
+.ai-accept-btn:hover {
+  background: linear-gradient(90deg, #357ae8 0%, #20c997 100%);
+}.ai-reject-btn {
+  border: 1.5px solid #ff4d4f;
+  background: #fff;
+  color: #ff4d4f;
+}
+.ai-reject-btn:hover {
+  background: #ff4d4f;
+  color: #fff;
+}.ai-interrupt-btn {
+  position: absolute;
+  right: 5px;
+  top: 5px;
+  z-index: 1001;
+  background: #fffbe6;
+  color: #faad14;
+  border: 1.5px solid #faad14;
+  box-shadow: 0 2px 8px rgba(250,173,20,0.08);
+}
+.ai-interrupt-btn:hover {
+  background: #ffe58f;
+}
 .tc-sidebar-header {
 	text-shadow: 0 1px 0 #ffffff;
 }.tc-tiddler-info {
@@ -3005,6 +3384,17 @@ strong a.tc-tiddlylink{
 .go-beyond.gradient .zhushi-neirong, .go-beyond.gradient sup{
     -webkit-text-fill-color: #44aa55;
     color: #44aa55;
+}
+.youthful-stars p, .youthful-stars sup{
+    font-family: 华文楷体;
+    background-image: linear-gradient(#000000, #573a2d, #9b3922);
+}
+.youthful-stars .zhushi{
+    text-decoration-color: #9b3922;
+}
+.youthful-stars.gradient .zhushi-neirong, .youthful-stars.gradient sup{
+    -webkit-text-fill-color: #9b3922;
+    color: #827b00;
 }.haremu-haremu p{
     font-family: 汉仪新蒂永乐大典;
     font-size: 20px;
@@ -3103,18 +3493,21 @@ a .heimu,
 
 <section class="tc-story-river tc-static-story-river">
 <a name="超越真实 成稿部分">
-<div class="tc-tiddler-frame tc-tiddler-view-frame tc-tiddler-exists  tc-tagged-%E8%B6%85%E8%B6%8A%E7%9C%9F%E5%AE%9E" data-tags="超越真实" data-tiddler-title="超越真实 成稿部分" role="article"><div class="tc-tiddler-title tc-clearfix"><div class="tc-titlebar"><span class="tc-tiddler-controls"><button aria-expanded="false" aria-label="更多" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fmore-tiddler-actions" title="更多操作"></button><span class=" tc-reveal" hidden="true"></span><button aria-label="复制此条目" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fclone" title="复制此条目"></button><span class="tc-popup-keep"><button aria-expanded="false" aria-label="导出此条目" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fexport-tiddler" draggable="true" title="导出此条目"></button></span><span class=" tc-reveal" hidden="true"></span><button aria-label="编辑此条目" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fedit" title="编辑此条目"></button><button aria-label="关闭" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fclose" title="关闭此条目"></button></span><span><h2 class="tc-title">超越真实 成稿部分</h2></span></div><div class="tc-tiddler-info tc-popup-handle tc-reveal" hidden="true"></div></div><div class="tc-reveal"></div><div class=" tc-reveal"><div class="tc-subtitle tc-clearfix">2025年10月06日 00:49</div></div><div class=" tc-reveal"><div class="tc-tags-wrapper"><span class="tc-tag-list-item" data-tag-title="超越真实"><span aria-expanded="false" class="tc-tag-label tc-btn-invisible" draggable="true" style="background-color:#17500a;fill:#ffffff;color:#ffffff;"><span class="tc-tag-exists">超越真实</span></span><span class="tc-drop-down tc-reveal" hidden="true"></span></span></div></div><div class="tc-tiddler-body tc-clearfix tc-reveal"><p><div class="title-width">
+<div class="tc-tiddler-frame tc-tiddler-view-frame tc-tiddler-exists  tc-tagged-%E8%B6%85%E8%B6%8A%E7%9C%9F%E5%AE%9E" data-tags="超越真实" data-tiddler-title="超越真实 成稿部分" role="article"><div class="tc-tiddler-title tc-clearfix"><div class="tc-titlebar"><span class="tc-tiddler-controls"><button aria-expanded="false" aria-label="更多" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fmore-tiddler-actions" title="更多操作"></button><span class=" tc-reveal" hidden="true"></span><button aria-label="复制此条目" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fclone" title="复制此条目"></button><span class="tc-popup-keep"><button aria-expanded="false" aria-label="导出此条目" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fexport-tiddler" draggable="true" title="导出此条目"></button></span><span class=" tc-reveal" hidden="true"></span><button aria-label="编辑此条目" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fedit" title="编辑此条目"></button><button aria-label="关闭" class="tc-btn-invisible tc-btn-%24%3A%2Fcore%2Fui%2FButtons%2Fclose" title="关闭此条目"></button></span><span><h2 class="tc-title">超越真实 成稿部分</h2></span></div><div class="tc-tiddler-info tc-popup-handle tc-reveal" hidden="true"></div></div><div class="tc-reveal"></div><div class=" tc-reveal"><div class="tc-subtitle tc-clearfix">2025年12月25日 15:56</div></div><div class=" tc-reveal"><div class="tc-tags-wrapper"><span class="tc-tag-list-item" data-tag-title="超越真实"><span aria-expanded="false" class="tc-tag-label tc-btn-invisible" draggable="true" style="background-color:#17500a;fill:#ffffff;color:#ffffff;"><span class="tc-tag-exists">超越真实</span></span><span class="tc-drop-down tc-reveal" hidden="true"></span></span></div></div><div class="tc-tiddler-body tc-clearfix tc-reveal"><p><div class="title-width">
+
   <h1 class="title-parent">
-    <span class="title-text">魔法与锢草之源</span>
+    <span class="title-text">
+      魔法、灵术与锢草之源
+    </span>
     <span class="filling-parent">
-      <span class="filling">............................................................................................................................................................</span>
+      <span class="filling">................................................................................................</span>
     </span>
     <span class="spacing"></span>
     <span class="right">
-      65174
+      65179
     </span>
   </h1>
-
+  
   
     <h2 class="title-parent">
       <span class="title-text">
@@ -3124,7 +3517,9 @@ a .heimu,
           </a>
         
       </span>
-      <span class="filling-parent"><span class="filling">.........................................................................................................................................................................</span></span>
+      <span class="filling-parent">
+        <span class="filling">............................................................................................</span>
+      </span>
       <span class="spacing"></span>
       <span class="right">
         12745
@@ -3139,7 +3534,9 @@ a .heimu,
           </a>
         
       </span>
-      <span class="filling-parent"><span class="filling">.........................................................................................................................................................................</span></span>
+      <span class="filling-parent">
+        <span class="filling">............................................................................................</span>
+      </span>
       <span class="spacing"></span>
       <span class="right">
         15147
@@ -3154,10 +3551,12 @@ a .heimu,
           </a>
         
       </span>
-      <span class="filling-parent"><span class="filling">.........................................................................................................................................................................</span></span>
+      <span class="filling-parent">
+        <span class="filling">............................................................................................</span>
+      </span>
       <span class="spacing"></span>
       <span class="right">
-        14610
+        14611
       </span>
     </h2>
   
@@ -3169,10 +3568,12 @@ a .heimu,
           </a>
         
       </span>
-      <span class="filling-parent"><span class="filling">.........................................................................................................................................................................</span></span>
+      <span class="filling-parent">
+        <span class="filling">............................................................................................</span>
+      </span>
       <span class="spacing"></span>
       <span class="right">
-        9856
+        9859
       </span>
     </h2>
   
@@ -3184,13 +3585,48 @@ a .heimu,
           </a>
         
       </span>
-      <span class="filling-parent"><span class="filling">.........................................................................................................................................................................</span></span>
+      <span class="filling-parent">
+        <span class="filling">............................................................................................</span>
+      </span>
       <span class="spacing"></span>
       <span class="right">
-        12816
+        12817
       </span>
     </h2>
   
+
+  <h1 class="title-parent">
+    <span class="title-text">
+      年轻的星群
+    </span>
+    <span class="filling-parent">
+      <span class="filling">................................................................................................</span>
+    </span>
+    <span class="spacing"></span>
+    <span class="right">
+      1743
+    </span>
+  </h1>
+  
+  
+    <h2 class="title-parent">
+      <span class="title-text">
+        
+          <a href="#gb6">
+            第6章 秋光欲曙
+          </a>
+        
+      </span>
+      <span class="filling-parent">
+        <span class="filling">............................................................................................</span>
+      </span>
+      <span class="spacing"></span>
+      <span class="right">
+        1743
+      </span>
+    </h2>
+  
+
 </div></p><p><span>* </span>注：目录中出现的数字是本章节字数，不是页码
 <style>
 .title-width {
@@ -3333,6 +3769,14 @@ a .heimu,
 <div class="word gradient go-beyond"><p>“你还好吗？”</p><p>伊芙的神态有些恍惚，她声称只是惊魂未定——其实她是太想休息了。战斗和奔跑，即使大半程都是旁观的，也比她熟悉的一切更加累人。这样想来上学期泠的秘密训练，其实有助于她的体质——不是想这个的时候。</p><p>索提里斯打开的道路，远处隐隐能看到蔚蓝色的光影，有些像他们坠入的那面镜子；但两人越是努力往前走，光影却越是模糊遥远，让人怀疑他们是否处于梦境之中。伊芙想爬上高处，去俯瞰一下地形；但迷宫般的建筑根本没有楼梯，想施放“夜风”也已经只剩下黑紫色的薄雾，而她甚至不感到意外；“心无杂念”是几乎任何魔法与异术的根基，是无法建立在这片不安与忧虑的沙土上的。希望已经没有意义，她只是不想让罗塔失望，不想辜负骑士候补的努力；但映入眼帘的一束光将她拉回现实，重新回想起自己为什么在这里。</p><p>“柯丝佳！”</p><p>罗塔突然冲向了某个地方；青蓝色的灵草就在那里，无人看守，细叶摇曳。昏迷不醒的柯丝佳穿着紫色的套裙和同色打底长裤，一双短靴，伊芙甚至能看清灰色鞋底麦穗的纹路。罗塔在她面前蹲下，放出净火，金色的火苗映照在她失去血色的脸、抿紧的薄唇上，能看出嘴唇下有些凸起，就连合拢的眼皮也鼓鼓的。 </p><p>而伊芙突然想到了更深远的什么东西。</p><p>“罗塔涅夫——我知道这是什么了。”</p><p>空色大返草——拥有强大的能力，能将衰弱扭转回健壮，伤病返回健康的“灵草”。</p><p>但作为魔法生物，想必也有着极其强大的力量。</p><p>在神话中，使人青春不老的泉源难免伴随诅咒。而从泠怀里毫不起眼的枯草，到如今盛壮的模样，它所做的只是“治愈”而已吗？罗塔伸手去拉柯丝佳；她的手臂软软的，比起火柴之类的棍状，更像鱿鱼骨那样的扁片儿。</p><p>柯丝佳并没有被看得见的丝线绑住；但罗塔似乎是拖不动她。草叶中流淌的天青的光影并没有在净火中熄灭，甚至更加晶莹明亮；就好像一位神秘出现在雪原中的女子，用清澈的声音解释自己没有威胁。</p><p>伴随着金属踏上冰结地面的声响，索提里斯降落在他们身后，胳膊下夹着一身白衣的泠，似乎也昏了过去。</p><p>“前几天，我接到了一位阿廖娜·巴克莱女士的委托。”他冷静地开口，“她的女儿在英国失踪了。虽然时间尚短，按理说不需要凤凰骑士出手调查的；但我发现这起案件十分有意思。这位上桥泠小姐，你们的同学，实际是一位改头换面的灵术师——灵术师是什么你们知道吧？”他看向两人。</p><p>“我们知道。”伊芙和罗塔异口同声地说。</p><p>“我不清楚她此前的履历，但她肯定不止12岁了，和你们同学的目的也并非如此单纯。但我只能确定，她构建了如此庞大的幻境，是无法只依赖于自己的魔力的。我在找柯丝佳·巴克莱小姐，也在找维系这座幻境的能量基石……啊哈。”</p><p>伊芙将空色大返草的事告诉了他。</p><p>索提里斯用狐疑的眼光打量着草，但还是冷静道：</p><p>“这座幻境可能会崩塌，但我想不会那么快。巴克莱小姐身上有异常的魔力流动——在无法直接斩断这条通路的情况下，直接让魔物失去行动能力，是最好的办法。”</p><p>他示意两人退后，举起他血红色的宝剑，对准了颤动的叶片的心脏；但随着一阵巨大的声响和震动，地面从他们的脚下裂开，仅余下浮在半空中的冰蓝色碎块。锁链无端从空中升起，将伊芙和罗塔和索提里斯、和剩余的世界分隔。刚才被他随手丢在地上的泠，不知何时醒转了过来。</p><p>“你只要救你的人就好了。还有什么人在这里，多少人被牺牲掉，都和你没有关系。”</p><p>泠冷冷地说。</p><p>伊芙感到难以言喻的厌恶、心寒和愤怒；但事到如今，怨恨已经没什么用了。她选择跟随泠修习灵术的时候，泠已经对她挥剑；她只是像跟随大鱼捕食被追赶四散逃窜的鱼群的海鸟，能吃多少就吃多少，然后在自己被大鱼一口吞没前拼命起飞。命运不会眷顾她是为救朋友来到这里——或者说为她自己的好奇；命运只会嘲笑愚蠢的人，但她可以把虚伪的善良刻在墓碑上。</p><p>冰蓝的锁链悬在四周，就好像拳台四角的绳子；但她伸手过去时，发现自己的动作迟缓了；似乎越接近锁链，越被一种无形的重量拖拽，再也无法逾越看不见的囚笼。索提里斯显然也发现异样；他的目光在伊芙和泠之间徘徊，后者也死死盯着大返草和倒下的柯丝佳，手攥锁链，一枚枚利刃般的冰晶静待指令收割某个人质的性命。</p><p>突然，伊芙仿佛看到索提里斯的单肩冒出了鲜红的翅膀，或电影描绘的古代英雄的披风。他使出一道半月形的斩击，切断了锁链，也将泠击得后退；伊芙不假思索地抓住罗塔，腾空而起，落在更远的平台上。她感受到“夜风”在她的耳边呼啸；它终究是回来了。</p><p>泠随即操控薄冰的圆盘向他们追来；索提里斯的咒文紧随其后，但同时还得防止泠趁机逃跑，这使他有些疲于应付。伊芙已经能看到那些圆盘上闪着光的刻痕，复杂的铭文像玛雅历法或魔法阵，或小孩描画的车轮，周围是锋利的齿刃；罗塔涅夫用金色的魔力包住拳头，打碎了背后的冰墙，将伊芙拉了进去。</p><p>伊芙焦急地在狭小的空间内寻找下一个庇护所；他们脚下已经不再是绵延不断、冰一样的地板，而是仿佛笼罩着雾气的万丈深渊。在相当高的地方，像瀑布一样悬着几块平台……</p><p>墙体向内爆开了。双肩忽然被揽住、向外倒去时，她才意识到一枚薄冰做的圆盘穿破了交织的霰雾，在视线停滞的片刻中几乎是静止的——而后重力捕获了她，而齿轮堪堪从头顶飞过。</p></div>
 
 <div class="word gradient go-beyond"><p>死里逃生的伊芙坠落在地面；罗塔沉重地趴在她身上，一动不动。她的身体似乎并无大碍，挣扎着爬了起来；但罗塔的一条胳膊受伤了，软软地垂着，血浸红了毛衣袖管。</p><p>罗塔的眼睛睁着，海水与晴空一样的眼瞳没有任何神采；他望着伊芙，而非自己的胳膊。</p><p>“你……救了我，对吗？”</p><p>深紫色的力量像水一样流泻了出来，甚至有些沉重；它动荡不安地闪烁着，映着幻造的天空。</p><p>“你在想什么？你的这些力量都源自我，不要以为对我还有什么胜算吧。”</p><p>从这里飞上去，即使做得到，路程也太远了。她不能在空中被击坠，或让重伤的罗塔再被偷袭。居于高处的尊者平静地望着她，就好像她从未亏欠过她似的；而在福至心灵的一瞬间，她与位于上桥泠背后、小心地控制着每个行动的骑士对上了眼神。</p><p>能量化作黑紫的刺刃，像飞针与箭矢，直冲着天空中的少女而去。她随手挥出泡沫似的冰雾，泯灭了这些之时，伊芙感到一阵说不出的虚弱，好像她的一部分、她的血，也连同魔力被耗散了。但她仍然在手中攥着更多“夜风”的力量，带着挑衅的神情向泠望去；既然你从未想过我能作为对手——既然无论是否对你动手，我都只是不自量力的弱者——那么被我伤到，一定是莫大的侮辱吧，这让我开始尝试了。</p><p>“夜风”在高空中凝聚，随即坠下，在主人不熟悉的操控中拐了一个大弯，直冲泠的身体；灵术师的感知捕获了运动的轨迹，她知道伊芙设计了假动作，想迷惑她；但迷惑不到……</p><p>能量从周身涌流而出，甚至来不及凝聚成深蓝或苍青的色彩；一瞬间她仿佛溶解了，只剩下精美的白色镶边的衣服，似乎比倒下的少女本人更为沉重。在其身后，一柄血红的长枪贯穿了大返草的基部，刺瘪了鼓胀多汁的叶柄；随着草叶萎缩，点点淡蓝紫色的能量散逸在空中，散落在泠和柯丝佳·巴克莱的周围。</p><p>伊芙已经扶着罗塔勉强站了起来；一开始她也不知道金发的少年还能做到。空间已开始崩解；远处的景观像雾一样，苍白的天顶也较之前更近了。索提里斯解释说，尽管处处带有泠的色彩，驱使幻境运转的庞大能量并非她一人能支撑的；她“借用”了空色大返草的能量，也成了与大返草建立“联系”的第一个人。</p><p>“所以她抓来柯丝佳……也是为了补充能量吗？因为她自己的已经不够用了？”</p><p>索提里斯点头，然后摇头，</p><p>“我不知道。但有趣的事情是，幻境也是在她绑架了巴克莱小姐后，才变得如此庞大的；可能是因为魔力的来源混杂，巴克莱小姐又失去了意识，导致幻境不再由上桥一手掌控，而开始遵循植物本身的‘增长’本能。”</p><p>“但现在大返草已经死了，那幻境……”</p><p>“它还没有死。前超能时代魔物的生命力不是人类可以比拟的；不过……你在干什么？”</p><p>伊芙推开了他，拖着沉重的、虽然尚且能用双脚走路的罗塔，来到灵草跟前。她抬起罗塔的胳膊，将它搭在一条在血红长枪的冲击中断裂、露出晶莹的露珠似的蓝紫色叶肉的叶片上。这条手臂连同衣袖已经被冷却的血液染成了几乎看不出发红的深色；裂开的织片间，被凝血混同一体的伤口的边界逐渐清晰，然后缩小，最后替代为新长出的皮肤，只有衣袖的破口、和些许未能清除的血迹，证明他受伤过。罗塔用另一只手触摸了那块地方；表情没有变化。</p><p>“倒也没有辜负泠的介绍跟名字……只可惜她看不到了。”伊芙扬起嘴角的语气没有丝毫可惜。</p><p>勉强能称为“大返草”的东西已经枯萎、褪色，曾经满盈的天青的肉质尽数散去，只剩下干瘪的、纸一样的外皮；核心的白光也暗淡了。即使在重伤的状态，它也依然遵循了治愈的本能；这下应该很有一段时间不用担心了。另一边，幻境与现实的边界再也无法维持；冰晶城市的边缘，露出篮球场馆的一角，几位焦急的大人冲了进来。</p><p>“伊芙？罗塔涅夫？索提里斯？你们都在吧？——这位是泠？这一定是巴克莱小姐？你还好吗？”黑莉跑在最前面，匆匆确认了他们的状态，然后开始给抬着担架的急救人员引路，把看起来是无菌的塑料床单从小方块中展开。</p><p>“昨天晚上，安卡列斯金同学也告知了希尔卡，”鲁泰布拉塔克斯老师说，“她因为没有及时看见一直很自责。但是我想，现在知道你们都好，她应该也宽慰了一些。”</p><p>另一边，黑莉正和急救人员一起安置失去意识的泠，索提里斯附在她耳边，应该是在说泠的过错；但黑莉还是对这位“现在还是我的学生”表现了足够的耐心。柯丝佳醒了；她的脸色已经比幻境里红润了一些，正在用一个臂带形的东西测量血压，对自己身处的场所显得困惑不解。罗塔在他身边坐下，俨然进入了保护者的角色，尽管伊芙还是觉得应该检查一下他的胳膊。</p><p>“很强烈的超能活动痕迹……但只是痕迹，皮肤和肌肉骨骼都没有受损。本体屏障看起来也没有问题……还很健康呢！”医生拍了拍罗塔的肩膀，尽管在听到“魔物”一词后脸又沉了下去。</p><p>在黑莉的坚持下，伊芙和罗塔还是跟救护车去了医院，接受超能和普通医学的全身检查；头一次从内部听着没有路过时尖厉的警笛声的时候，她仍不忘充满歉意地跟罗塔和伊芙解释：</p><p>“恰恰是昨天晚上我的手机电量不足了……如果早知道，我就该买一块备用电池的。”</p><p>“不过那样老师你是怎么起来的？”</p><p>“冥冥中的预感。”</p><p>车流驶入伦敦的清晨。</p></div>
+
+</p>
+</div></p><p><div class="book">
+<p><h1 id="gb6">第6章 秋光欲曙</h1>
+
+<div class="word gradient youthful-stars"><p>爱本学校，无数学子与家长的梦想之地。</p><p>兴趣的自由发展、数一数二的成绩与名次、乃至于能力者的突破和成长，无论什么样的愿望，应该都能在这片水畔的校园得偿所愿。</p><p>夜幕已经落下，北方的空气里弥漫着烟熏火燎的气味，教学楼和小吃小贩的灯光照亮了步道，法国梧桐的树干是三种颜色，树叶也是，有些已经枯黄落到地面，有些还绿绿地在树冠上高挂着。对于初一的学生来说，上晚自习还是第一次；可以随便买什么想吃的东西当作晚饭，然后在上小时的时间范围内闲逛着。</p><p>两个女生沿路来了。为首的少女有着一头粉紫色的长发，披至肩膀，那颜色好像倒挂金钟、或是化学课上的品红；刘海分开到脑袋两侧，像一对小翅膀。她有一双哀伤而温柔的大眼睛，至少现在看起来是哀伤的；深蓝色的校服领口装饰着白色条带和蝴蝶结，但浓重的颜色让这件外套仍称不上美观，只是可能比运动服略好，也被她比同龄人发育更早的胸部撑了起来。她低语着：</p><p>“……我是真的很想当凤凰骑士。”</p><p>“我知道。”</p><p>她的同伴穿着一身白色的校服，黑发简单地扎成马尾，戴着眼镜，露出秀丽的面貌，和有些过于冷静的神情。她停住了脚步。</p><p>“江芷？”</p><p>江芷这才缓缓说道：“骑士候补并不是公开选拔的，要得到术灵的‘认可’，就代表着首先得搞到一片术灵。而今天你的表现，即使对于你一贯的热情也很不寻常了；是不是……已经有门路了？沈翩艳？”</p><p>少女表现出了一瞬的迟疑，但还是点了点头，</p><p>“我说出来的事，……请你一定不要怀疑。”</p><p>她垂在深蓝色衣袖里的手在指尖握紧了，</p><p>“我已经找到术灵了。有一群叫‘旨九’的灵术师，他们有一片骑士术灵……现在还没人知道。只要加入他们，我就能得到术灵，然后成为骑士。”她的眼睛里闪着火一样的光彩，“这可能是此生仅有的机会。但是，‘旨九’并不是公开招人的组织……我已经和上桥大人，甚至菊池和赭雀大人求了很多次，但是从来就没有人听我……你比我学习好，也比我聪明，你知道怎么加入‘旨九’吗？”</p><p>江芷皱起了眉。</p><p>“我怎么知道……不对，我根本就不知道旨九是什么。”</p><p>沈翩艳晃了晃脑袋，充满憧憬地讲了起来：</p><p>“旨九是上桥泠大人一手建立的组织，由日本最优秀的九位灵术师集结成。性格清雅，使用秘传的法杖的菊池小星；长发及腰，但其实是帅气大哥哥的赭雀绯伽琉；上桥大人的左膀右臂，弓道家横松德绫子；还有一些我也不知道的人……我听说他们会解决各种和灵术有关的神秘委托，还会去往世界各地……其实今天我特别想抓住机会，就是因为上桥大人要来中国了！她本来是解决了其他的委托，要直接回日本，但是菊池大人说她爱惜新人的才能……你看，怎么样？我得好好表现！”</p><p>风吹动了地面的落叶，往前走了几步，才看出不是牛皮纸袋。</p><p>江芷往前走了几步，她的疑问落在了粉紫发少女没有想到的角度：</p><p>“所以说，如果你被选上了，你就要去日本了吗？”</p><p>沈翩艳沉默地点了点头。</p><p>“你父母会同意吗？”</p><p>“你怎么在考虑这个……”粉紫发少女看来，一切的困难都是可以被解决的；问题是跨过眼前这关，而眼前的问题如泰山般不好攀登。就读于爱本的孩子，一多半都不是本地人；沈翩艳的老家在河南，而江芷则来自上海。她们每天在这座校园里的生活，本来就是理想的结晶——愿意付出，并相信“会变得更好”的志向，自然也被授予了从理想着手的眼光。</p><p>江芷没再多言；但那天晚上，她在笔记本里认真写下了“旨九”的名字，准备等周五放学后她拿到电脑的时候，就搜索一下。</p></div>
+
+<div class="word gradient youthful-stars"><p>对江芷来说，沈翩艳是她在爱本的第一个朋友。她性格真挚，勤奋，在旁人看来甚至可能是个不爱说话的女生；但她的身上隐藏着不可小觑的热情与理想。一旦找到了适宜的火种，便会燃烧起来，直至自己和身边的一切都变得无比明亮。</p><p>她知道，拥有这样热情的人，其实并不需要站在背后加油助威的人；沈翩艳的愿景是盲目的，在她为自己能力的孱弱叹惋之时，并没有考虑过她最好的朋友只是个普通人——和路边的无名小卒一样，并没有特殊能力的人。</p><p>但无论如何，我会帮你的，沈翩艳。因为我已经有一个计划了。</p></div>
 
 </p>
 </div></p></div>
